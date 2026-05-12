@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SMSLab - Facebook Feed Generator</title>
+<link rel="stylesheet" href="smslab_social_generator.css">
+</head>
+<body>
+<a class="landing-link" href="../index.html">Back to SMSLab</a>
+<header>
+  <div>
+    <h1 id="pageTitle">SMSLab - Facebook Feed Generator</h1>
+    <p class="muted" id="pageIntro"></p>
+  </div>
+</header>
+
+<main class="wrap layout">
+  <section class="stack">
+    <div class="card">
+      <h2>Feed setup</h2>
+      <div class="grid">
+        <div class="field">
+          <label>Feed title, internal use</label>
+          <input id="feedTitle">
+        </div>
+        <div class="field">
+          <label>Embedded Data prefix</label>
+          <input id="prefix">
+        </div>
+      </div>
+      <div class="toggle"><span>Enable interaction tracking for Qualtrics</span><input id="track" type="checkbox" checked></div>
+      <div class="toggle"><span>Use new Qualtrics <code>__js_</code> prefix</span><input id="jsprefix" type="checkbox" checked></div>
+      <div class="btns">
+        <button id="addPostTop" type="button">Add post</button>
+        <button class="secondary" id="copy" type="button">Copy generated feed HTML</button>
+        <button class="secondary" id="downStim" type="button">Download feed HTML</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Feed posts</h2>
+      <p class="muted" id="postHint"></p>
+      <div id="posts"></div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <div class="card">
+      <h2>Live feed preview</h2>
+      <p class="muted">The preview updates automatically and shows the feed as respondents will see it.</p>
+      <iframe id="previewFrame" class="preview-frame" title="Live feed preview"></iframe>
+    </div>
+
+    <div class="card">
+      <h2>Embedded Data fields</h2>
+      <p class="muted">Add these fields in Survey Flow before the feed stimulus block. Leave values blank.</p>
+      <div class="fields" id="fields"></div>
+    </div>
+
+    <div class="card">
+      <h2>Generated feed HTML</h2>
+      <pre id="out"></pre>
+    </div>
+
+    <div class="card">
+      <h2>Qualtrics instructions</h2>
+      <p class="muted" id="qualtricsLead"></p>
+      <ol class="muted">
+        <li>Create a Descriptive Text question for the feed stimulus.</li>
+        <li>Open HTML/source view, usually <code>&lt;&gt;</code>.</li>
+        <li>Paste the full generated feed HTML.</li>
+        <li>Add the Embedded Data fields above in Survey Flow before the stimulus block.</li>
+        <li>Preview the survey, interact with posts, complete the survey, and verify the recorded values in the response data.</li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<script>
+window.SMSLAB_PLATFORM={
+  key:"facebook",
+  shortName:"Facebook",
+  pageTitle:"SMSLab - Facebook Feed Generator",
+  pageIntro:"An open-source generator for realistic Facebook-style feed stimuli with reactions, comments, shares, labels, menus, and trackable interactions.",
+  feedTitle:"Facebook feed stimulus",
+  defaultPrefix:"fbfeed",
+  downloadName:"smslab_facebook_feed_stimulus.html",
+  postHint:"Build Facebook-style posts with page/profile headers, sponsored disclosures, reaction counts, comments, shares, and clickable controls.",
+  showHandle:false,
+  showVisibility:false,
+  labels:{
+    name:"Page or profile name",
+    handle:"",
+    visibility:"",
+    body:"Post text",
+    followToggle:"Show Follow button",
+    promoToggle:"Show Sponsored label",
+    promoLabel:"Sponsored label"
+  },
+  placeholders:{
+    name:"e.g., Social Research Lab",
+    handle:"",
+    time:"e.g., 2h",
+    body:"Write the Facebook post text..."
+  },
+  defaults:{
+    name:"Page name",
+    handle:"",
+    time:"",
+    body:"",
+    promoText:"Sponsored",
+    infoLabel:"Why am I seeing this?",
+    infoText:"This label can describe sponsorship, targeting, AI use, or any experimental disclosure.",
+    ctaText:"Learn more"
+  },
+  visibilityOptions:[
+    {value:"Public",label:"Public"},
+    {value:"Friends",label:"Friends"},
+    {value:"Friends of friends",label:"Friends of friends"},
+    {value:"Only me",label:"Only me"}
+  ],
+  counts:[
+    {key:"reactions",label:"Reaction count",placeholder:"e.g., 1.2K"},
+    {key:"comments",label:"Comment count",placeholder:"e.g., 84"},
+    {key:"shares",label:"Share count",placeholder:"e.g., 25"}
+  ],
+  reactions:["Like","Love","Care","Haha","Wow","Sad","Angry"],
+  shareOptions:[],
+  sendOptions:[],
+  repostOptions:[],
+  menuOptions:[
+    {field:"save",label:"Save post"},
+    {field:"hide",label:"Hide post"},
+    {field:"report",label:"Report post"}
+  ],
+  icons:{like:"&#128077;",comment:"&#128172;",share:"&#8599;"},
+  commentPlaceholder:"Write a comment...",
+  replyPlaceholder:"Write a comment...",
+  commentButton:"Post",
+  replyButton:"Post",
+  commentAuthorPlaceholder:"e.g., Alex Morgan",
+  commentTextPlaceholder:"Write the comment...",
+  tracking:{
+    always:["reaction","reaction_value","comment_opened","comment_submitted","comment_text","share"],
+    followField:"follow"
+  },
+  samplePost:{}
+};
+</script>
+<script src="smslab_social_generator_core.js"></script>
+</body>
+</html>

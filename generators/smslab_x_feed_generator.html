@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SMSLab - X Feed Generator</title>
+<link rel="stylesheet" href="smslab_social_generator.css">
+</head>
+<body>
+<a class="landing-link" href="../index.html">Back to SMSLab</a>
+<header>
+  <div>
+    <h1 id="pageTitle">SMSLab - X Feed Generator</h1>
+    <p class="muted" id="pageIntro"></p>
+  </div>
+</header>
+
+<main class="wrap layout">
+  <section class="stack">
+    <div class="card">
+      <h2>Feed setup</h2>
+      <div class="grid">
+        <div class="field">
+          <label>Feed title, internal use</label>
+          <input id="feedTitle">
+        </div>
+        <div class="field">
+          <label>Embedded Data prefix</label>
+          <input id="prefix">
+        </div>
+      </div>
+      <div class="toggle"><span>Enable interaction tracking for Qualtrics</span><input id="track" type="checkbox" checked></div>
+      <div class="toggle"><span>Use new Qualtrics <code>__js_</code> prefix</span><input id="jsprefix" type="checkbox" checked></div>
+      <div class="btns">
+        <button id="addPostTop" type="button">Add post</button>
+        <button class="secondary" id="copy" type="button">Copy generated feed HTML</button>
+        <button class="secondary" id="downStim" type="button">Download feed HTML</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Feed posts</h2>
+      <p class="muted" id="postHint"></p>
+      <div id="posts"></div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <div class="card">
+      <h2>Live feed preview</h2>
+      <p class="muted">The preview updates automatically and shows the feed as respondents will see it.</p>
+      <iframe id="previewFrame" class="preview-frame" title="Live feed preview"></iframe>
+    </div>
+
+    <div class="card">
+      <h2>Embedded Data fields</h2>
+      <p class="muted">Add these fields in Survey Flow before the feed stimulus block. Leave values blank.</p>
+      <div class="fields" id="fields"></div>
+    </div>
+
+    <div class="card">
+      <h2>Generated feed HTML</h2>
+      <pre id="out"></pre>
+    </div>
+
+    <div class="card">
+      <h2>Qualtrics instructions</h2>
+      <p class="muted" id="qualtricsLead"></p>
+      <ol class="muted">
+        <li>Create a Descriptive Text question for the feed stimulus.</li>
+        <li>Open HTML/source view, usually <code>&lt;&gt;</code>.</li>
+        <li>Paste the full generated feed HTML.</li>
+        <li>Add the Embedded Data fields above in Survey Flow before the stimulus block.</li>
+        <li>Preview the survey, interact with posts, complete the survey, and verify the recorded values in the response data.</li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<script>
+window.SMSLAB_PLATFORM={
+  key:"x",
+  shortName:"X",
+  pageTitle:"SMSLab - X Feed Generator",
+  pageIntro:"An open-source generator for realistic X-style feed stimuli with reply, repost, like, bookmark, share, promoted labels, and trackable interactions.",
+  feedTitle:"X feed stimulus",
+  defaultPrefix:"xfeed",
+  downloadName:"smslab_x_feed_stimulus.html",
+  postHint:"Build X-style posts with display names, @handles, promoted labels, replies, reposts, likes, bookmarks, shares, and view-like metrics.",
+  showVisibility:false,
+  labels:{
+    name:"Display name",
+    handle:"Username / handle",
+    visibility:"",
+    body:"Post text",
+    followToggle:"Show Follow button",
+    promoToggle:"Show Promoted label",
+    promoLabel:"Promoted label"
+  },
+  placeholders:{
+    name:"e.g., Social Media Lab",
+    handle:"e.g., @socialmedialab",
+    time:"e.g., 4h",
+    body:"Write the X post text..."
+  },
+  defaults:{
+    name:"Display name",
+    handle:"@username",
+    time:"",
+    body:"",
+    promoText:"Promoted",
+    infoLabel:"Context",
+    infoText:"Use this pop-up for contextual notes, synthetic-content disclosure, or condition-specific information.",
+    ctaText:"View details"
+  },
+  visibilityOptions:[
+    {value:"Public",label:"Public"},
+    {value:"Followers",label:"Followers"},
+    {value:"Subscribers",label:"Subscribers"}
+  ],
+  counts:[
+    {key:"replies",label:"Reply count",placeholder:"e.g., 18"},
+    {key:"reposts",label:"Repost count",placeholder:"e.g., 42"},
+    {key:"likes",label:"Like count",placeholder:"e.g., 560"},
+    {key:"bookmarks",label:"Bookmark count",placeholder:"e.g., 23"},
+    {key:"views",label:"Views / share-side metric",placeholder:"e.g., 12K"}
+  ],
+  reactions:[],
+  shareOptions:[],
+  sendOptions:[],
+  repostOptions:[],
+  menuOptions:[
+    {field:"not_interested",label:"Not interested in this post"},
+    {field:"mute",label:"Mute this account"},
+    {field:"report",label:"Report post"}
+  ],
+  icons:{reply:"&#128172;",repost:"&#8635;",like:"&#9825;",bookmark:"&#128278;",share:"&#8599;"},
+  commentPlaceholder:"Post your reply",
+  replyPlaceholder:"Post your reply",
+  commentButton:"Reply",
+  replyButton:"Reply",
+  commentAuthorPlaceholder:"e.g., @alex_morgan",
+  commentTextPlaceholder:"Write the reply...",
+  tracking:{
+    always:["reply_opened","reply_submitted","reply_text","repost","like","bookmark","share"],
+    followField:"follow"
+  },
+  samplePost:{}
+};
+</script>
+<script src="smslab_social_generator_core.js"></script>
+</body>
+</html>
