@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SMSLab - Social Media Stimulus Lab</title>
+  <title>SMSLab - Social Media Stimuli Lab</title>
   <style>
 :root{--bg:#f6f6f6;--card:#fff;--text:#111;--muted:#555;--line:#ddd;--soft:#f1f1f1}
 *{box-sizing:border-box}
@@ -24,11 +24,19 @@ h2{font-size:30px;letter-spacing:-.04em;margin:0 0 16px}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 .guides{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
-.card h3{margin:0 0 8px;font-size:18px;letter-spacing:-.02em}
+.grid .card{display:flex;flex-direction:column;min-height:282px}
+.card h3{margin:0 0 8px;font-size:18px;letter-spacing:-.02em;min-height:44px}
 .card p{font-size:14px;color:var(--muted)}
+.grid .card p{flex:1;margin:0 0 18px}
+.grid .card .button{display:block;text-align:center;width:100%;margin:0}
 .status{display:inline-block;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:850;margin-bottom:12px}
 .available{background:#e8f7ed;color:#167c3a}
 .soon{background:#f1f1f1;color:#666}
+.platform-icon{width:42px;height:42px;display:block;margin-bottom:14px;object-fit:contain}
+.platform-icon.ig{border-radius:12px}
+.platform-icon.fb{border-radius:10px}
+.platform-icon.li{border-radius:6px}
+.platform-icon.x{border-radius:8px}
 .support{background:#111;color:#fff;border-radius:28px;padding:32px;margin-top:28px}
 .support p{color:#ddd;max-width:780px}
 .support .button{background:#fff;color:#111}
@@ -56,7 +64,7 @@ footer a{color:#111}
       </div>
     </nav>
     <div class="hero">
-      <h1>Social Media Stimulus Lab</h1>
+      <h1>Social Media Stimuli Lab</h1>
       <p>Open-source tools for creating realistic social-media-style experimental stimuli for Qualtrics.</p>
       <a class="button" href="#generators">Try the generators</a>
       <a class="button secondary" href="#guides">Read the guides</a>
@@ -77,25 +85,28 @@ footer a{color:#111}
       <h2>SMSLab Generators</h2>
       <div class="grid">
         <div class="card">
-          <span class="status available">Available now</span>
+          <img class="platform-icon ig" src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram logo" loading="lazy">
           <h3>Instagram Feed Generator</h3>
           <p>Create Instagram-style feed stimuli with multiple posts, captions, comments, labels, call-to-action banners, and trackable interactions.</p>
           <a class="button" href="generators/smslab_instagram_feed_generator.html">Open generator</a>
         </div>
         <div class="card">
-          <span class="status soon">Coming soon</span>
+          <img class="platform-icon fb" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook logo" loading="lazy">
           <h3>Facebook Feed Generator</h3>
-          <p>A generator for Facebook-style experimental feed stimuli.</p>
+          <p>Create Facebook-style feed stimuli with posts, reactions, comments, shares, sponsored labels, and trackable interactions.</p>
+          <a class="button" href="generators/smslab_facebook_feed_generator.html">Open generator</a>
         </div>
         <div class="card">
-          <span class="status soon">Coming soon</span>
+          <img class="platform-icon li" src="https://upload.wikimedia.org/wikipedia/commons/8/81/LinkedIn_icon.svg" alt="LinkedIn logo" loading="lazy">
           <h3>LinkedIn Feed Generator</h3>
-          <p>A generator for professional-network-style experimental stimuli.</p>
+          <p>Create LinkedIn-style feed stimuli with professional headers, reactions, comments, reposts, sends, promoted labels, and tracking.</p>
+          <a class="button" href="generators/smslab_linkedin_feed_generator.html">Open generator</a>
         </div>
         <div class="card">
-          <span class="status soon">Coming soon</span>
+          <img class="platform-icon x" src="https://upload.wikimedia.org/wikipedia/commons/c/cc/X_icon.svg" alt="X logo" loading="lazy">
           <h3>X Feed Generator</h3>
-          <p>A generator for short-form post and feed stimuli inspired by X-style interfaces.</p>
+          <p>Create X-style feed stimuli with replies, reposts, likes, bookmarks, shares, promoted labels, view-style metrics, and tracking.</p>
+          <a class="button" href="generators/smslab_x_feed_generator.html">Open generator</a>
         </div>
       </div>
     </div>
@@ -119,7 +130,7 @@ footer a{color:#111}
 
       <div id="support" class="support">
         <h2>Support SMSLab</h2>
-        <p>SMSLab is an independent project developed by a PhD student with limited research funding. If you find these tools useful, you can support the project with a small donation. Contributions help cover domain, hosting, maintenance, development time, and the creation of new generators and guides.</p>
+        <p>SMSLab is an independent project developed by a PhD student. If you find these tools useful, you can support the project with a small donation. Contributions help cover domain, hosting, maintenance, development time, and the creation of new generators and guides.</p>
         <a class="button" href="#">Support the project</a>
       </div>
     </div>
