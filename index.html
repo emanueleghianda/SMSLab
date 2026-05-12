@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SMSLab - Social Media Stimulus Lab</title>
+  <style>
+:root{--bg:#f6f6f6;--card:#fff;--text:#111;--muted:#555;--line:#ddd;--soft:#f1f1f1}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
+.container{max-width:1080px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:1px solid #e5e5e5}
+nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.logo{font-weight:850;font-size:20px;letter-spacing:-.03em}
+.nav{display:flex;gap:18px;flex-wrap:wrap}
+.nav a{color:#111;text-decoration:none;font-weight:650;font-size:14px}
+.hero{padding:70px 0 54px}
+h1{font-size:50px;line-height:1.05;letter-spacing:-.055em;margin:0 0 16px;max-width:760px}
+.hero p{font-size:18px;color:var(--muted);max-width:740px;margin:0 0 26px}
+.button{display:inline-block;background:#111;color:#fff;text-decoration:none;font-weight:750;border-radius:14px;padding:12px 18px;margin:4px 8px 4px 0}
+.button.secondary{background:#fff;color:#111;border:1px solid #ccc}
+section{padding:42px 0}
+h2{font-size:30px;letter-spacing:-.04em;margin:0 0 16px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.guides{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.card h3{margin:0 0 8px;font-size:18px;letter-spacing:-.02em}
+.card p{font-size:14px;color:var(--muted)}
+.status{display:inline-block;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:850;margin-bottom:12px}
+.available{background:#e8f7ed;color:#167c3a}
+.soon{background:#f1f1f1;color:#666}
+.support{background:#111;color:#fff;border-radius:28px;padding:32px;margin-top:28px}
+.support p{color:#ddd;max-width:780px}
+.support .button{background:#fff;color:#111}
+footer{padding:32px 0;color:#666;font-size:13px}
+footer a{color:#111}
+.article{background:#fff;border:1px solid var(--line);border-radius:22px;padding:28px;margin:28px 0;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.article h1{font-size:38px}
+.article h2{font-size:24px;margin-top:32px}
+.article code,.article pre{background:#f1f1f1;border-radius:8px;padding:2px 6px}
+.article pre{padding:14px;overflow:auto}
+@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}.guides{grid-template-columns:1fr}h1{font-size:40px}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}nav{align-items:flex-start;flex-direction:column}.hero{padding-top:46px}h1{font-size:34px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <nav>
+      <div class="logo">SMSLab</div>
+      <div class="nav">
+        <a href="#generators">Generators</a>
+        <a href="#guides">Guides</a>
+        <a href="contact.html">Contact me</a>
+        <a href="#support">Support</a>
+      </div>
+    </nav>
+    <div class="hero">
+      <h1>Social Media Stimulus Lab</h1>
+      <p>Open-source tools for creating realistic social-media-style experimental stimuli for Qualtrics.</p>
+      <a class="button" href="#generators">Try the generators</a>
+      <a class="button secondary" href="#guides">Read the guides</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="container">
+      <h2>What is SMSLab?</h2>
+      <p>SMSLab is an independent academic project designed to help researchers, PhD students, instructors, and students create interactive social media stimuli for survey experiments. The tools generate customizable HTML stimuli that can be copied into Qualtrics and used to track participant interactions through Embedded Data.</p>
+    </div>
+  </section>
+
+  <section id="generators">
+    <div class="container">
+      <h2>SMSLab Generators</h2>
+      <div class="grid">
+        <div class="card">
+          <span class="status available">Available now</span>
+          <h3>Instagram Feed Generator</h3>
+          <p>Create Instagram-style feed stimuli with multiple posts, captions, comments, labels, call-to-action banners, and trackable interactions.</p>
+          <a class="button" href="generators/smslab_instagram_feed_generator.html">Open generator</a>
+        </div>
+        <div class="card">
+          <span class="status soon">Coming soon</span>
+          <h3>Facebook Feed Generator</h3>
+          <p>A generator for Facebook-style experimental feed stimuli.</p>
+        </div>
+        <div class="card">
+          <span class="status soon">Coming soon</span>
+          <h3>LinkedIn Feed Generator</h3>
+          <p>A generator for professional-network-style experimental stimuli.</p>
+        </div>
+        <div class="card">
+          <span class="status soon">Coming soon</span>
+          <h3>X Feed Generator</h3>
+          <p>A generator for short-form post and feed stimuli inspired by X-style interfaces.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="guides">
+    <div class="container">
+      <h2>Guides</h2>
+      <div class="guides">
+        <div class="card">
+          <h3>How to create an Instagram-style feed stimulus</h3>
+          <p>Learn how to build a feed, add posts, customize labels and comments, export the HTML, and insert the stimulus into Qualtrics.</p>
+          <a class="button secondary" href="guides/instagram-feed-guide.html">Read guide</a>
+        </div>
+        <div class="card">
+          <h3>Randomization and Embedded Data in Qualtrics</h3>
+          <p>Learn how to randomize experimental conditions and set up Embedded Data fields to track participant interactions with the stimuli.</p>
+          <a class="button secondary" href="guides/qualtrics-randomization-embedded-data.html">Read guide</a>
+        </div>
+      </div>
+
+      <div id="support" class="support">
+        <h2>Support SMSLab</h2>
+        <p>SMSLab is an independent project developed by a PhD student with limited research funding. If you find these tools useful, you can support the project with a small donation. Contributions help cover domain, hosting, maintenance, development time, and the creation of new generators and guides.</p>
+        <a class="button" href="#">Support the project</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p>SMSLab is an independent academic project. It is not affiliated with, endorsed by, or sponsored by Meta, Instagram, Facebook, LinkedIn, X, or any other social media platform. Platform names are used descriptively only.</p>
+    <p><a href="privacy.html">Privacy Policy</a> · <a href="disclaimer.html">Disclaimer</a></p>
+  </div>
+</footer>
+</body>
+</html>

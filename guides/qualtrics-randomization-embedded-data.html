@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Randomization and Embedded Data in Qualtrics - SMSLab</title>
+  <style>
+:root{--bg:#f6f6f6;--card:#fff;--text:#111;--muted:#555;--line:#ddd;--soft:#f1f1f1}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6}
+.container{max-width:1080px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:1px solid #e5e5e5}
+nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.logo{font-weight:850;font-size:20px;letter-spacing:-.03em}
+.logo a{color:#111;text-decoration:none}
+.nav{display:flex;gap:18px;flex-wrap:wrap}
+.nav a{color:#111;text-decoration:none;font-weight:650;font-size:14px}
+.article{background:#fff;border:1px solid var(--line);border-radius:22px;padding:32px;margin:28px 0;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.article h1{font-size:42px;line-height:1.08;letter-spacing:-.05em;margin:0 0 12px}
+.article h2{font-size:26px;letter-spacing:-.03em;margin:38px 0 12px}
+.article h3{font-size:19px;letter-spacing:-.02em;margin:26px 0 8px}
+.article p{color:#333;margin:0 0 14px}
+.article .lead{font-size:18px;color:#555;max-width:850px;margin-bottom:26px}
+.article ul,.article ol{color:#333;margin-top:8px;margin-bottom:18px}
+.article li{margin-bottom:8px}
+.article code{background:#f1f1f1;border-radius:7px;padding:2px 6px;font-size:.95em}
+.article pre{background:#111;color:#f4f4f4;border-radius:16px;padding:16px;overflow:auto;line-height:1.45;font-size:13px}
+.callout{background:#f7f7f7;border:1px solid #ddd;border-radius:16px;padding:16px;margin:18px 0}
+.callout strong{display:block;margin-bottom:6px}
+.tablewrap{overflow:auto;margin:18px 0}
+table{width:100%;border-collapse:collapse;background:#fff;font-size:14px}
+th,td{border:1px solid #ddd;padding:10px;text-align:left;vertical-align:top}
+th{background:#f1f1f1}
+.button{display:inline-block;background:#111;color:#fff;text-decoration:none;font-weight:750;border-radius:14px;padding:12px 18px;margin:16px 8px 4px 0}
+footer{padding:32px 0;color:#666;font-size:13px}
+@media(max-width:700px){.article{padding:22px}.article h1{font-size:34px}nav{align-items:flex-start;flex-direction:column}.nav{gap:12px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <nav>
+      <div class="logo"><a href="../index.html">SMSLab</a></div>
+      <div class="nav">
+        <a href="../index.html#generators">Generators</a>
+        <a href="../index.html#guides">Guides</a>
+        <a href="../contact.html">Contact me</a>
+        <a href="../index.html#support">Support</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+<article class="article">
+  <h1>Randomization and Embedded Data in Qualtrics</h1>
+  <p class="lead">
+    This guide explains how to randomize experimental conditions in Qualtrics and how to save
+    participant interactions with SMSLab stimuli using Embedded Data.
+  </p>
+
+  <div class="callout">
+    <strong>What you will learn</strong>
+    You will learn how to set up one condition per block, randomize participants across conditions,
+    declare Embedded Data fields, and verify that interaction data are correctly saved in your dataset.
+  </div>
+
+  <h2>1. Why Embedded Data matters</h2>
+  <p>
+    SMSLab stimuli can record interactions such as likes, comments, reposts, direct shares, saves,
+    carousel views, clicks on AI Information, clicks on Learn more banners, and comments submitted
+    by respondents.
+  </p>
+  <p>
+    In Qualtrics, these values are stored as <code>Embedded Data</code>. Embedded Data fields behave
+    like variables in your final dataset. They do not need to be shown to participants.
+  </p>
+
+  <h2>2. Understand the field names</h2>
+  <p>
+    The generator displays a list of fields that should be added to Qualtrics Survey Flow. Examples:
+  </p>
+  <pre>__js_igfeed_post1_like
+__js_igfeed_post1_comment
+__js_igfeed_post1_comment_submitted
+__js_igfeed_post1_comment_text
+__js_igfeed_post1_repost
+__js_igfeed_post1_direct
+__js_igfeed_post1_save
+__js_igfeed_post1_carousel_slide
+__js_igfeed_post1_carousel_second_seen
+__js_igfeed_post1_ai_info_opened</pre>
+
+  <p>
+    These names are structured as follows:
+  </p>
+  <pre>__js_ + prefix + post number + interaction</pre>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th>Part</th><th>Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>__js_</code></td><td>Prefix used by newer Qualtrics JavaScript Embedded Data behavior.</td></tr>
+        <tr><td><code>igfeed</code></td><td>The default Embedded Data prefix from the generator.</td></tr>
+        <tr><td><code>post1</code></td><td>The post number in the generated feed.</td></tr>
+        <tr><td><code>like</code></td><td>The specific interaction being tracked.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>3. Create one block per condition</h2>
+  <p>
+    If you are running an experiment with multiple conditions, create one Qualtrics block for each
+    condition.
+  </p>
+  <p>
+    Example for a two-condition study:
+  </p>
+  <pre>Block 1: Positive Instagram feed
+Block 2: Negative Instagram feed</pre>
+
+  <p>
+    Example for a 2 × 2 design:
+  </p>
+  <pre>Block 1: AI disclosure + High engagement
+Block 2: AI disclosure + Low engagement
+Block 3: No AI disclosure + High engagement
+Block 4: No AI disclosure + Low engagement</pre>
+
+  <p>
+    Inside each block, add a <code>Descriptive Text</code> question containing the HTML stimulus
+    generated by SMSLab.
+  </p>
+
+  <h2>4. Add the generated HTML to Qualtrics</h2>
+  <ol>
+    <li>Open the relevant condition block.</li>
+    <li>Add a <code>Descriptive Text</code> question.</li>
+    <li>Open the Rich Content Editor.</li>
+    <li>Switch to HTML/source view, often shown as <code>&lt;&gt;</code>.</li>
+    <li>Paste the full generated HTML code.</li>
+    <li>Save the question.</li>
+  </ol>
+
+  <div class="callout">
+    <strong>Tip</strong>
+    Do not paste only part of the HTML. The generated code includes the layout, CSS, icons, and
+    JavaScript needed for the stimulus to work.
+  </div>
+
+  <h2>5. Add Embedded Data fields in Survey Flow</h2>
+  <p>
+    Before collecting data, you need to declare the Embedded Data fields shown by the generator.
+  </p>
+  <ol>
+    <li>Open <code>Survey Flow</code>.</li>
+    <li>Click <code>Add a New Element Here</code>.</li>
+    <li>Select <code>Embedded Data</code>.</li>
+    <li>Add all the field names listed by the generator.</li>
+    <li>Leave the values blank.</li>
+    <li>Move this Embedded Data element above the randomized experimental blocks.</li>
+    <li>Save the Survey Flow.</li>
+  </ol>
+
+  <p>
+    For example, if your stimulus tracks likes, saves, and comments for Post 1, add fields such as:
+  </p>
+  <pre>__js_igfeed_post1_like
+__js_igfeed_post1_save
+__js_igfeed_post1_comment
+__js_igfeed_post1_comment_submitted
+__js_igfeed_post1_comment_text</pre>
+
+  <h2>6. Randomize participants across conditions</h2>
+  <p>
+    In Survey Flow, add a <code>Randomizer</code> element. Place your condition blocks inside the
+    Randomizer and configure it to show one element.
+  </p>
+
+  <p>
+    A typical structure looks like this:
+  </p>
+  <pre>Survey Flow
+│
+├── Embedded Data fields
+│
+├── Randomizer: randomly present 1 of the following elements
+│   ├── Block: Condition 1
+│   ├── Block: Condition 2
+│   ├── Block: Condition 3
+│   └── Block: Condition 4
+│
+└── Outcome measures / questionnaire blocks</pre>
+
+  <p>
+    This ensures that each participant sees only one feed condition.
+  </p>
+
+  <h2>7. Save the experimental condition</h2>
+  <p>
+    It is good practice to save the assigned condition as an Embedded Data variable.
+    For example:
+  </p>
+  <pre>condition = positive_feed
+condition = negative_feed</pre>
+
+  <p>
+    To do this, add an Embedded Data element inside or immediately before each condition block and
+    set a field such as:
+  </p>
+  <pre>condition = positive_feed</pre>
+
+  <p>
+    This makes analysis easier because your dataset will contain an explicit condition variable.
+  </p>
+
+  <h2>8. What each interaction field means</h2>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th>Field suffix</th><th>Meaning</th><th>Typical value</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>like</code></td><td>Participant clicked the like icon.</td><td><code>0</code> or <code>1</code></td></tr>
+        <tr><td><code>comment</code></td><td>Participant opened the comment area by clicking the comment icon.</td><td><code>0</code> or <code>1</code></td></tr>
+        <tr><td><code>comment_submitted</code></td><td>Participant submitted a written comment.</td><td><code>0</code> or <code>1</code></td></tr>
+        <tr><td><code>comment_text</code></td><td>Text entered by the participant.</td><td>Free text</td></tr>
+        <tr><td><code>repost</code></td><td>Participant clicked the repost icon.</td><td><code>0</code> or <code>1</code></td></tr>
+        <tr><td><code>direct</code></td><td>Participant clicked the direct/share icon.</td><td><code>0</code> or <code>1</code></td></tr>
+        <tr><td><code>save</code></td><td>Participant clicked the save icon.</td><td><code>0</code> or <code>1</code></td></tr>
+        <tr><td><code>carousel_slide</code></td><td>Final carousel slide visible to the participant.</td><td><code>1</code>, <code>2</code>, etc.</td></tr>
+        <tr><td><code>carousel_second_seen</code></td><td>Participant reached the second carousel image or later.</td><td><code>0</code> or <code>1</code></td></tr>
+        <tr><td><code>ai_info_opened</code></td><td>Participant clicked the AI Information label.</td><td><code>0</code> or <code>1</code></td></tr>
+        <tr><td><code>cta_click</code></td><td>Participant clicked the Learn more banner.</td><td><code>0</code> or <code>1</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>9. Test before launching</h2>
+  <p>
+    Always test your survey before collecting data.
+  </p>
+  <ol>
+    <li>Preview the survey.</li>
+    <li>Interact with the stimulus: like, save, comment, open AI Information, click Learn more, scroll the carousel.</li>
+    <li>Complete the survey.</li>
+    <li>Open the response data.</li>
+    <li>Check whether the Embedded Data fields contain the expected values.</li>
+  </ol>
+
+  <p>
+    Example expected output:
+  </p>
+  <pre>__js_igfeed_post1_like = 1
+__js_igfeed_post1_comment = 1
+__js_igfeed_post1_comment_submitted = 1
+__js_igfeed_post1_comment_text = "Interesting post!"
+__js_igfeed_post2_carousel_second_seen = 1</pre>
+
+  <h2>10. Common problems and fixes</h2>
+
+  <h3>The Embedded Data fields are blank</h3>
+  <ul>
+    <li>Check that the fields were added in Survey Flow.</li>
+    <li>Check that the Embedded Data element appears before the stimulus block.</li>
+    <li>Check that the field names match exactly, including the <code>__js_</code> prefix.</li>
+    <li>Preview the survey and complete a full test response.</li>
+  </ul>
+
+  <h3>The stimulus does not look correct in Qualtrics</h3>
+  <ul>
+    <li>Make sure you pasted the full HTML code.</li>
+    <li>Make sure you used HTML/source view, not the normal visual editor.</li>
+    <li>Check whether external image URLs are working.</li>
+  </ul>
+
+  <h3>The condition variable is missing</h3>
+  <ul>
+    <li>Add a separate Embedded Data field called <code>condition</code>.</li>
+    <li>Set its value differently inside each condition block.</li>
+  </ul>
+
+  <h2>11. Recommended workflow</h2>
+  <ol>
+    <li>Create each feed condition in SMSLab.</li>
+    <li>Use a different Embedded Data prefix for each condition if needed.</li>
+    <li>Copy each generated HTML stimulus into its own Qualtrics block.</li>
+    <li>Add all Embedded Data fields in Survey Flow.</li>
+    <li>Add a condition variable.</li>
+    <li>Randomize condition blocks.</li>
+    <li>Test the full survey before launching.</li>
+  </ol>
+
+  <a class="button" href="../generators/smslab_instagram_feed_generator.html">Open Instagram Feed Generator</a>
+</article>
+</main>
+<footer><div class="container">SMSLab is an independent academic project.</div></footer>
+</body>
+</html>

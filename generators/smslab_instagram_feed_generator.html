@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SMSLab - Instagram Feed Generator</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f6f6f6;color:#111;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+header,.wrap{max-width:1240px;margin:20px auto;padding:0 16px}
+header>div,.card{background:#fff;border:1px solid #ddd;border-radius:22px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+h1{margin:0;font-size:28px;letter-spacing:-.03em}
+h2{font-size:17px;margin:0 0 8px}
+h3{font-size:15px;margin:0 0 8px}
+.muted{color:#666;font-size:14px;line-height:1.45}
+.layout{display:grid;grid-template-columns:1.06fr .94fr;gap:18px;align-items:start}
+.stack{display:grid;gap:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{margin:10px 0}
+label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#333}
+input,select,textarea{width:100%;border:1px solid #ccc;border-radius:13px;padding:10px 12px;font:inherit;font-size:14px;background:#fff}
+textarea{min-height:96px;resize:vertical;line-height:1.45}
+.toggle{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fafafa;border:1px solid #ddd;border-radius:14px;padding:10px 12px;margin:10px 0;font-weight:650;font-size:14px}
+.postform{background:#fafafa;border:1px solid #ddd;border-radius:18px;padding:14px;margin:14px 0}
+.posthead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.subcard{background:#fff;border:1px solid #e4e4e4;border-radius:16px;padding:14px;margin-top:12px}
+.seedcomment{background:#fafafa;border:1px solid #ddd;border-radius:14px;padding:12px;margin:10px 0}
+.row-between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+button{border:0;border-radius:13px;padding:10px 14px;background:#111;color:#fff;font:inherit;font-size:14px;font-weight:750;cursor:pointer}
+button.secondary{background:#fff;color:#111;border:1px solid #ccc}
+button.danger{background:#fff;color:#b00020;border:1px solid #f0b7c1}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+pre{max-height:560px;overflow:auto;background:#111;color:#eee;border-radius:16px;padding:14px;font-size:12px;line-height:1.45;white-space:pre-wrap;word-break:break-word}
+.fields{background:#111;color:#fff;border-radius:16px;padding:14px;font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;max-height:300px;overflow:auto}
+code{background:#eee;border-radius:6px;padding:2px 5px}
+.small{font-size:12px;color:#666;line-height:1.4}
+.landing-link{position:fixed;top:16px;right:16px;z-index:9999;display:inline-block;background:#111;color:#fff;text-decoration:none;font-size:13px;font-weight:750;border-radius:999px;padding:10px 14px;box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.landing-link:hover{background:#333}
+.preview-frame{width:100%;height:760px;border:1px solid #ddd;border-radius:16px;background:#fff}
+@media(max-width:980px){.layout,.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="landing-link" href="../index.html">Back to SMSLab</a>
+<header>
+  <div>
+    <h1>SMSLab - Instagram Feed Generator</h1>
+    <p class="muted">An open-source, shareable generator for realistic Instagram-style feed stimuli.</p>
+  </div>
+</header>
+
+<main class="wrap layout">
+  <section class="stack">
+    <div class="card">
+      <h2>Feed setup</h2>
+      <div class="grid">
+        <div class="field">
+          <label>Feed title, internal use</label>
+          <input id="feedTitle" placeholder="e.g., Experimental Instagram feed">
+        </div>
+        <div class="field">
+          <label>Embedded Data prefix</label>
+          <input id="prefix" value="igfeed">
+        </div>
+      </div>
+      <div class="toggle"><span>Enable interaction tracking for Qualtrics</span><input id="track" type="checkbox" checked></div>
+      <div class="toggle"><span>Use new Qualtrics <code>__js_</code> prefix</span><input id="jsprefix" type="checkbox" checked></div>
+      <div class="btns">
+        <button id="addPostTop" type="button">Add post</button>
+        <button class="secondary" id="copy" type="button">Copy generated feed HTML</button>
+        <button class="secondary" id="downStim" type="button">Download feed HTML</button>
+        <button class="secondary" id="downApp" type="button">Download this generator</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Feed posts</h2>
+      <p class="muted">Each post can be a single-image post or a carousel. For carousel posts, paste one image URL per line.</p>
+      <div id="posts"></div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <div class="card">
+      <h2>Live feed preview</h2>
+      <p class="muted">The preview updates automatically and shows the feed as respondents will see it.</p>
+      <iframe id="previewFrame" class="preview-frame" title="Live feed preview"></iframe>
+    </div>
+
+    <div class="card">
+      <h2>Embedded Data fields</h2>
+      <p class="muted">Add these fields in Survey Flow before the feed stimulus block. Leave values blank.</p>
+      <div class="fields" id="fields"></div>
+    </div>
+
+    <div class="card">
+      <h2>Generated feed HTML</h2>
+      <pre id="out"></pre>
+    </div>
+
+    <div class="card">
+      <h2>Qualtrics instructions</h2>
+      <ol class="muted">
+        <li>Create a Descriptive Text question for the feed stimulus.</li>
+        <li>Open HTML/source view, usually <code>&lt;&gt;</code>.</li>
+        <li>Paste the full generated feed HTML.</li>
+        <li>Add the Embedded Data fields above in Survey Flow before the stimulus block.</li>
+        <li>Preview the survey, interact with posts, complete the survey, and verify the recorded values in the response data.</li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+let postUid=0;
+
+function esc(s){return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function tag(s,c){return esc(s).split("\\n").map(l=>l.split(" ").map(w=>w.startsWith("#")?`<span class="${c}">${w}</span>`:w).join(" ")).join("<br>")}
+function pref(){return String($("prefix").value||"igfeed").trim().replace(/[^a-zA-Z0-9_]/g,"_").replace(/^_+/,"")||"igfeed"}
+function fmtNum(n){if(!n)return"";let x=Number(n);return Number.isNaN(x)?String(n):x.toLocaleString("en-US")}
+function displayUser(p){return p.username||"username"}
+
+function addSeedComment(box, defaults={}){
+  const holder=box.querySelector('.seed-comments-holder');
+  const row=document.createElement('div');
+  row.className='seedcomment';
+  row.innerHTML=`
+    <div class="row-between"><strong>Prewritten comment</strong><button type="button" class="danger seed-remove">Remove comment</button></div>
+    <div class="grid">
+      <div class="field"><label>Comment username</label><input data-c="username" placeholder="e.g., user123" value="${esc(defaults.username||"")}"></div>
+      <div class="field"><label>Comment profile image URL</label><input data-c="avatar" placeholder="Paste profile image URL" value="${esc(defaults.avatar||"")}"></div>
+    </div>
+    <div class="field"><label>Comment text</label><textarea data-c="text" placeholder="Write the comment...">${esc(defaults.text||"")}</textarea></div>
+  `;
+  holder.appendChild(row);
+  row.querySelectorAll('input,textarea').forEach(x=>{x.addEventListener('input',update);x.addEventListener('change',update)});
+  row.querySelector('.seed-remove').onclick=()=>{row.remove();update()};
+  update();
+}
+
+function addPost(defaults={}, afterBox=null){
+  postUid++;
+  const box=document.createElement('div');
+  box.className='postform';
+  box.dataset.uid=postUid;
+  box.innerHTML=`
+    <div class="posthead">
+      <h3>Post</h3>
+      <button type="button" class="danger remove-post">Remove</button>
+    </div>
+
+    <div class="subcard">
+      <h3>Post setup</h3>
+      <div class="grid">
+        <div class="field"><label>Username</label><input data-k="username" placeholder="e.g., accountname" value="${esc(defaults.username||"")}"></div>
+        <div class="field"><label>Timestamp</label><input data-k="time" placeholder="e.g., 2 hours ago" value="${esc(defaults.time||"")}"></div>
+        <div class="field" style="grid-column:1/-1"><label>Profile image URL</label><input data-k="avatar" placeholder="Paste profile image URL" value="${esc(defaults.avatar||"")}"></div>
+        <div class="field"><label>Post format</label><select data-k="format"><option value="single">Single image post</option><option value="carousel">Carousel post</option></select></div>
+      </div>
+      <div class="field"><label>Image URL(s)</label><textarea data-k="imgs" placeholder="Paste one image URL. For carousel, paste one URL per line.">${esc(defaults.imgs||"")}</textarea></div>
+      <div class="field"><label>Caption</label><textarea data-k="cap" placeholder="Write caption...">${esc(defaults.cap||"")}</textarea></div>
+    </div>
+
+    <div class="subcard">
+      <h3>Labels and other options</h3>
+      <div class="toggle"><span>Show Follow button</span><input data-k="follow" type="checkbox" checked></div>
+      <div class="toggle"><span>Show verified badge</span><input data-k="verified" type="checkbox"></div>
+
+      <div class="toggle"><span>Show location label</span><input data-k="showLoc" type="checkbox"></div>
+      <div class="field" data-box="loc" style="display:none"><label>Location label</label><input data-k="loc" placeholder="e.g., Milan, Italy"></div>
+
+      <div class="toggle"><span>Show Sponsored label</span><input data-k="spon" type="checkbox"></div>
+      <div class="field" data-box="spon" style="display:none"><label>Sponsored label</label><input data-k="sponText" value="Sponsored"></div>
+
+      <div class="toggle"><span>Show clickable AI Information</span><input data-k="ai" type="checkbox"></div>
+      <div data-box="ai" style="display:none">
+        <div class="field"><label>AI label</label><input data-k="aiLabel" value="AI Information"></div>
+        <div class="field"><label>AI pop-up text</label><input data-k="aiText" value="These images were generated using AI."></div>
+      </div>
+
+      <div class="toggle"><span>Show Learn more banner</span><input data-k="cta" type="checkbox"></div>
+      <div data-box="cta" style="display:none">
+        <div class="field"><label>Banner text</label><input data-k="ctaText" value="Learn more"></div>
+        <div class="field"><label>Banner link</label><input data-k="ctaUrl" placeholder="https://example.com"></div>
+      </div>
+
+      <div class="toggle"><span>Show number of likes</span><input data-k="showLikes" type="checkbox"></div>
+      <div class="field" data-box="likes" style="display:none"><label>Number of likes</label><input data-k="likes" type="number" min="0" placeholder="e.g., 1248"></div>
+
+      <div class="toggle"><span>Show number of comments</span><input data-k="showComments" type="checkbox"></div>
+      <div class="field" data-box="comments" style="display:none"><label>Number of comments</label><input data-k="comments" type="number" min="0" placeholder="e.g., 36"></div>
+
+      <div class="subcard" style="margin-top:12px">
+        <div class="row-between"><h3 style="margin:0">Prewritten comments</h3><button type="button" class="secondary add-seed-comment">Add comment</button></div>
+        <p class="small">Each comment can include its own username and profile image.</p>
+        <div class="seed-comments-holder"></div>
+      </div>
+    </div>
+
+    <div class="btns" style="margin-top:12px">
+      <button type="button" class="secondary add-post-below">Add post</button>
+    </div>
+  `;
+  if(afterBox && afterBox.parentNode){
+    afterBox.parentNode.insertBefore(box, afterBox.nextSibling);
+  } else {
+    $('posts').appendChild(box);
+  }
+
+  box.querySelector('[data-k="format"]').value=defaults.format||'single';
+  if(defaults.follow===false) box.querySelector('[data-k="follow"]').checked=false;
+  if(defaults.verified) box.querySelector('[data-k="verified"]').checked=true;
+  if(defaults.showLoc) box.querySelector('[data-k="showLoc"]').checked=true;
+  if(defaults.loc) box.querySelector('[data-k="loc"]').value=defaults.loc;
+  if(defaults.spon) box.querySelector('[data-k="spon"]').checked=true;
+  if(defaults.sponText) box.querySelector('[data-k="sponText"]').value=defaults.sponText;
+  if(defaults.ai) box.querySelector('[data-k="ai"]').checked=true;
+  if(defaults.aiLabel) box.querySelector('[data-k="aiLabel"]').value=defaults.aiLabel;
+  if(defaults.aiText) box.querySelector('[data-k="aiText"]').value=defaults.aiText;
+  if(defaults.cta) box.querySelector('[data-k="cta"]').checked=true;
+  if(defaults.ctaText) box.querySelector('[data-k="ctaText"]').value=defaults.ctaText;
+  if(defaults.ctaUrl) box.querySelector('[data-k="ctaUrl"]').value=defaults.ctaUrl;
+  if(defaults.showLikes) box.querySelector('[data-k="showLikes"]').checked=true;
+  if(defaults.likes) box.querySelector('[data-k="likes"]').value=defaults.likes;
+  if(defaults.showComments) box.querySelector('[data-k="showComments"]').checked=true;
+  if(defaults.comments) box.querySelector('[data-k="comments"]').value=defaults.comments;
+
+  box.querySelectorAll('input,textarea,select').forEach(x=>{x.addEventListener('input',()=>{togglePostBoxes(box);update()});x.addEventListener('change',()=>{togglePostBoxes(box);update()})});
+  box.querySelector('.remove-post').onclick=()=>{box.remove();renumberPosts();update()};
+  box.querySelector('.add-post-below').onclick=()=>addPost({}, box);
+  box.querySelector('.add-seed-comment').onclick=()=>addSeedComment(box);
+  (defaults.seedComments||[]).forEach(c=>addSeedComment(box,c));
+  togglePostBoxes(box);
+  renumberPosts();
+  update();
+}
+
+function togglePostBoxes(box){
+  const show=(key,on)=>{const el=box.querySelector(`[data-box="${key}"]`); if(el) el.style.display=on?'block':'none';};
+  show('loc', box.querySelector('[data-k="showLoc"]').checked);
+  show('spon', box.querySelector('[data-k="spon"]').checked);
+  show('ai', box.querySelector('[data-k="ai"]').checked);
+  show('cta', box.querySelector('[data-k="cta"]').checked);
+  show('likes', box.querySelector('[data-k="showLikes"]').checked);
+  show('comments', box.querySelector('[data-k="showComments"]').checked);
+}
+
+function renumberPosts(){
+  [...document.querySelectorAll('.postform')].forEach((box,i)=>{box.querySelector('.posthead h3').textContent=`Post ${i+1}`});
+}
+function postValue(box,k){const x=box.querySelector(`[data-k="${k}"]`); if(!x) return ''; return x.type==='checkbox'?x.checked:x.value}
+function getSeedComments(box){
+  return [...box.querySelectorAll('.seedcomment')].map(row=>({
+    username:(row.querySelector('[data-c="username"]')?.value||'').trim(),
+    avatar:(row.querySelector('[data-c="avatar"]')?.value||'').trim(),
+    text:(row.querySelector('[data-c="text"]')?.value||'').trim()
+  })).filter(c=>c.username||c.text||c.avatar)
+}
+function getPosts(){
+  return [...document.querySelectorAll('.postform')].map((box,i)=>({
+    idx:i+1,
+    username:postValue(box,'username').trim(),
+    time:postValue(box,'time').trim(),
+    avatar:postValue(box,'avatar').trim(),
+    format:postValue(box,'format'),
+    imgs:postValue(box,'imgs').split('\n').map(x=>x.trim()).filter(Boolean),
+    cap:postValue(box,'cap'),
+    follow:postValue(box,'follow'),
+    verified:postValue(box,'verified'),
+    showLoc:postValue(box,'showLoc'),
+    loc:postValue(box,'loc').trim(),
+    spon:postValue(box,'spon'),
+    sponText:postValue(box,'sponText').trim()||'Sponsored',
+    ai:postValue(box,'ai'),
+    aiLabel:postValue(box,'aiLabel').trim()||'AI Information',
+    aiText:postValue(box,'aiText').trim()||'These images were generated using AI.',
+    cta:postValue(box,'cta'),
+    ctaText:postValue(box,'ctaText').trim()||'Learn more',
+    ctaUrl:postValue(box,'ctaUrl').trim(),
+    showLikes:postValue(box,'showLikes'),
+    likes:postValue(box,'likes').trim(),
+    showComments:postValue(box,'showComments'),
+    comments:postValue(box,'comments').trim(),
+    seedComments:getSeedComments(box)
+  }))
+}
+function feedSettings(){return{title:$('feedTitle').value.trim()||'Instagram feed stimulus',prefix:pref(),track:$('track').checked,jsprefix:$('jsprefix').checked}}
+function fieldNames(){
+  const s=feedSettings();
+  if(!s.track) return [];
+  let out=[];
+  getPosts().forEach(p=>{
+    const base=`${s.jsprefix?'__js_':''}${s.prefix}_post${p.idx}_`;
+    if(p.follow) out.push(base+'follow');
+    out.push(base+'like', base+'comment', base+'comment_submitted', base+'comment_text', base+'repost', base+'direct', base+'save');
+    if(p.cta) out.push(base+'cta_click');
+    if(p.format==='carousel' && p.imgs.length>1) out.push(base+'carousel_slide', base+'carousel_second_seen');
+    if(p.ai) out.push(base+'ai_info_opened');
+  });
+  return out;
+}
+
+function seedCommentMarkup(c){
+  return `<div class="igfeed-seedcomment"><div class="igfeed-commentavatarwrap">${c.avatar?`<img class="igfeed-commentavatar" src="${esc(c.avatar)}" alt="Comment profile image">`:`<div class="igfeed-commentavatar igfeed-commentavatar-fallback">IMG</div>`}</div><div class="igfeed-commentbody"><div class="igfeed-commenttext"><strong>${esc(c.username||'user')}</strong> ${esc(c.text||'')}</div></div></div>`
+}
+
+function postHtml(p){
+  const user=displayUser(p);
+  const verifiedBadge = p.verified ? `<span class="igfeed-verified" aria-label="Verified account" title="Verified account"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M7.8 12.4l2.7 2.7 5.8-6.2"></path></svg></span>` : '';
+  const total=Math.max(p.imgs.length,1);
+  const car=p.format==='carousel' && p.imgs.length>1;
+  const slides=p.imgs.length ? p.imgs.map((url,i)=>`<div class="igfeed-slide"><img class="igfeed-img" src="${esc(url)}" alt="Instagram feed post ${p.idx} image ${i+1}"></div>`).join('') : `<div class="igfeed-slide"><div class="igfeed-ph">Image URL missing</div></div>`;
+  const dots=p.imgs.map((_,i)=>`<span class="igfeed-dot ${i===0?'on':''}"></span>`).join('');
+  const caption=tag(p.cap,'igfeed-tag');
+  const likesMarkup=p.showLikes && p.likes ? `<div class="igfeed-likecount">${esc(fmtNum(p.likes))} likes</div>` : '';
+  const commentsMarkup=p.showComments && p.comments ? `<div class="igfeed-commentcount">View all ${esc(fmtNum(p.comments))} comments</div>` : '';
+  const ctaMarkup=p.cta ? (p.ctaUrl ? `<a class="igfeed-cta" data-action="cta_click" href="${esc(p.ctaUrl)}" target="_blank" rel="noopener noreferrer"><span>${esc(p.ctaText)}</span><span class="igfeed-cta-arrow">›</span></a>` : `<button type="button" class="igfeed-cta" data-action="cta_click"><span>${esc(p.ctaText)}</span><span class="igfeed-cta-arrow">›</span></button>`) : '';
+  const aiButton=p.ai ? `<button type="button" class="igfeed-ai" data-action="ai_info_button">${esc(p.aiLabel)}</button>` : '';
+  const aiBox=p.ai ? `<div class="igfeed-aibox"><button type="button" class="igfeed-aiclose" data-action="ai_close">×</button><div class="igfeed-aititle">${esc(p.aiLabel)}</div><div class="igfeed-aitext">${esc(p.aiText)}</div></div>` : '';
+  const seeded=(p.seedComments||[]).map(seedCommentMarkup).join('');
+  return `<article class="igfeed-post" data-post="${p.idx}">
+    <div class="igfeed-head">
+      <div class="igfeed-prof">
+        ${p.avatar?`<img class="igfeed-av" src="${esc(p.avatar)}" alt="Profile image">`:`<div class="igfeed-av igfeed-av-fallback">IMG</div>`}
+        <div class="igfeed-userbox">
+          <div class="igfeed-userrow">
+            <span class="igfeed-user">${esc(user)}</span>${verifiedBadge}
+            ${p.follow?`<button type="button" class="igfeed-follow" data-action="follow">Follow</button>`:''}
+          </div>
+          ${p.showLoc && p.loc ? `<div class="igfeed-meta">${esc(p.loc)}</div>` : ''}
+          ${p.spon ? `<div class="igfeed-meta">${esc(p.sponText)}</div>` : ''}
+          ${aiButton}
+        </div>
+      </div>
+      <div class="igfeed-menu">⋯</div>
+    </div>
+    ${aiBox}
+    <div class="igfeed-carousel-wrap">
+      ${car?`<div class="igfeed-counter">1/${total}</div><button type="button" class="igfeed-arrow igfeed-prev">‹</button><button type="button" class="igfeed-arrow igfeed-next">›</button>`:''}
+      <div class="igfeed-carousel">${slides}</div>
+    </div>
+    ${ctaMarkup}
+    <div class="igfeed-actions">
+      <div class="igfeed-left">
+        <button type="button" class="igfeed-iconbtn" data-action="like" aria-label="Like post"><svg class="igfeed-icon" viewBox="0 0 24 24"><path class="igfeed-heart" d="M20.8 4.6c-1.8-1.7-4.7-1.5-6.4.3L12 7.4 9.6 4.9C7.9 3.1 5 2.9 3.2 4.6c-2 1.9-2.1 5-.2 7l9 8.9 9-8.9c1.9-2 1.8-5.1-.2-7z"/></svg></button>
+        <button type="button" class="igfeed-iconbtn" data-action="comment" aria-label="Comment on post"><svg class="igfeed-icon" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 17 0z"/></svg></button>
+        <button type="button" class="igfeed-iconbtn" data-action="repost" aria-label="Repost post"><svg class="igfeed-icon" viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
+        <button type="button" class="igfeed-iconbtn" data-action="direct" aria-label="Send in direct"><svg class="igfeed-icon" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button>
+      </div>
+      <button type="button" class="igfeed-iconbtn igfeed-savebtn" data-action="save" aria-label="Save post"><svg class="igfeed-icon" viewBox="0 0 24 24"><path class="igfeed-bookmark" d="M6 3h12v18l-6-4-6 4V3z"/></svg></button>
+    </div>
+    ${car?`<div class="igfeed-dots">${dots}</div>`:''}
+    ${likesMarkup}
+    <div class="igfeed-caption"><strong>${esc(user)}</strong><span>${caption}</span></div>
+    ${commentsMarkup}
+    <div class="igfeed-commentsarea">
+      <div class="igfeed-commentlist">${seeded}</div>
+      <div class="igfeed-compose"><input type="text" class="igfeed-commentinput" placeholder="Add a comment..."><button type="button" class="igfeed-commentsubmit">Post</button></div>
+    </div>
+    ${p.time?`<div class="igfeed-date">${esc(p.time)}</div>`:''}
+  </article>`
+}
+
+function generated(){
+  const s=feedSettings(), posts=getPosts();
+  const postsMarkup = posts.length ? posts.map(postHtml).join('') : `<p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#666;padding:16px">Add at least one post.</p>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(s.title)}</title><style>
+.igfeed-feed{max-width:430px;margin:24px auto;background:#fff;border:1px solid #dbdbdb;border-radius:12px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#111}
+.igfeed-post{position:relative;border-bottom:1px solid #efefef;background:#fff}
+.igfeed-post:last-child{border-bottom:0}
+.igfeed-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid #efefef}
+.igfeed-prof{display:flex;gap:10px;align-items:center}.igfeed-av{width:38px;height:38px;border-radius:50%;border:1px solid #ddd;object-fit:cover;background:#f0f0f0}.igfeed-av-fallback{display:flex;align-items:center;justify-content:center;color:#777;font-size:11px;font-weight:700}.igfeed-userbox{line-height:1.15}.igfeed-userrow{display:flex;align-items:center;gap:8px}.igfeed-user{font-weight:750;font-size:14px}.igfeed-verified{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;margin-left:2px;color:#0095f6;vertical-align:-2px}.igfeed-verified svg{display:block;width:14px;height:14px}.igfeed-verified circle{fill:#0095f6}.igfeed-verified path{fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.igfeed-follow{padding:0;border:0;background:transparent;color:#0095f6;font:inherit;font-size:14px;font-weight:750;cursor:pointer}.igfeed-follow:before{content:"•";color:#777;margin-right:8px;font-weight:400}.igfeed-follow.is-following{color:#111}.igfeed-meta{font-size:12px;color:#737373;margin-top:3px}
+.igfeed-ai{margin-top:3px;padding:0;border:0;background:transparent;color:#737373;font:inherit;font-size:12px;cursor:pointer}.igfeed-ai:hover{text-decoration:underline}.igfeed-aibox{display:none;position:absolute;top:58px;left:60px;right:14px;max-width:320px;background:#fff;border:1px solid #dbdbdb;border-radius:12px;padding:12px 14px;box-shadow:0 8px 24px rgba(0,0,0,.16);z-index:10}.igfeed-aibox.is-visible{display:block}.igfeed-aiclose{position:absolute;top:8px;right:10px;border:0;background:transparent;color:#777;font-size:16px;cursor:pointer;padding:0}.igfeed-aititle{font-size:13px;font-weight:700;margin-bottom:4px}.igfeed-aitext{font-size:13px;line-height:1.35;color:#333}.igfeed-menu{font-size:22px;line-height:1;color:#111}
+.igfeed-carousel-wrap{position:relative;background:#f7f7f7;overflow:hidden}.igfeed-carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none}.igfeed-carousel::-webkit-scrollbar{display:none}.igfeed-slide{min-width:100%;scroll-snap-align:start}.igfeed-img{display:block;width:100%;height:auto}.igfeed-ph{height:360px;display:flex;align-items:center;justify-content:center;text-align:center;color:#777;background:linear-gradient(135deg,#f7f7f7,#e9e9e9);padding:24px}.igfeed-counter{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.65);color:#fff;border-radius:999px;padding:4px 9px;font-size:12px;z-index:2}.igfeed-arrow{position:absolute;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;border:0;background:rgba(255,255,255,.88);box-shadow:0 1px 4px rgba(0,0,0,.16);font-size:20px;line-height:1;color:#111;cursor:pointer;z-index:2}.igfeed-prev{left:10px}.igfeed-next{right:10px}
+.igfeed-cta{display:flex;justify-content:space-between;align-items:center;width:100%;padding:12px 14px;border:0;border-top:1px solid #efefef;border-bottom:1px solid #efefef;background:#fff;color:#111;text-decoration:none;font:inherit;font-size:14px;font-weight:700;cursor:pointer}.igfeed-cta-arrow{font-size:18px;line-height:1}
+.igfeed-actions{display:flex;justify-content:space-between;align-items:center;padding:12px 14px 6px}.igfeed-left{display:flex;gap:14px;align-items:center}.igfeed-iconbtn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;border:0;background:transparent;color:#111;cursor:pointer}.igfeed-iconbtn:active,.igfeed-follow:active,.igfeed-ai:active,.igfeed-arrow:active{transform:scale(.96)}.igfeed-arrow:active{transform:translateY(-50%) scale(.96)}.igfeed-icon{width:24px;height:24px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}.igfeed-iconbtn.is-liked{color:#ed4956}.igfeed-iconbtn.is-liked .igfeed-heart{fill:currentColor}.igfeed-iconbtn.is-commented{color:#0095f6}.igfeed-iconbtn.is-reposted{color:#16a34a}.igfeed-iconbtn.is-directed{color:#0095f6}.igfeed-iconbtn.is-saved{color:#111}.igfeed-iconbtn.is-saved .igfeed-bookmark{fill:currentColor}.igfeed-dots{display:flex;justify-content:center;gap:4px;padding-bottom:4px}.igfeed-dot{width:6px;height:6px;border-radius:50%;background:#c7c7c7}.igfeed-dot.on{background:#0095f6}
+.igfeed-likecount{padding:0 14px 4px;font-size:14px;font-weight:700}.igfeed-commentcount{padding:0 14px 4px;font-size:14px;color:#737373}.igfeed-caption{padding:4px 14px;font-size:14px;line-height:1.42}.igfeed-caption strong{margin-right:8px}.igfeed-tag{color:#00376b}.igfeed-commentsarea{display:none}.igfeed-commentsarea.is-visible{display:block}.igfeed-commentlist{padding:0 14px 0}.igfeed-seedcomment,.igfeed-livecomment{display:flex;gap:10px;align-items:flex-start;padding:6px 0}.igfeed-commentavatar{width:28px;height:28px;border-radius:50%;border:1px solid #ddd;object-fit:cover;background:#f0f0f0}.igfeed-commentavatar-fallback{display:flex;align-items:center;justify-content:center;color:#777;font-size:9px;font-weight:700}.igfeed-commentbody{font-size:13px;line-height:1.35}.igfeed-commenttext strong{margin-right:6px}.igfeed-compose{display:flex;gap:8px;align-items:center;padding:8px 14px 10px;border-top:1px solid #f3f3f3}.igfeed-commentinput{flex:1;border:0;padding:0;background:transparent;font:inherit;font-size:14px;outline:none}.igfeed-commentsubmit{border:0;background:transparent;color:#0095f6;font:inherit;font-size:14px;font-weight:700;cursor:pointer;padding:0}.igfeed-date{padding:0 14px 14px;font-size:10px;color:#737373;text-transform:uppercase;letter-spacing:.03em}
+@media(max-width:480px){.igfeed-aibox{left:14px;right:14px;max-width:none}}
+</style></head><body><div class="igfeed-feed">${postsMarkup}</div><script>(function(){var prefix=${JSON.stringify(s.prefix)},tracking=${JSON.stringify(s.track)};function setED(post,key,val){if(!tracking)return;var field=prefix+"_post"+post+"_"+key;var v=String(val);if(window.Qualtrics&&Qualtrics.SurveyEngine){if(typeof Qualtrics.SurveyEngine.setJSEmbeddedData==="function")Qualtrics.SurveyEngine.setJSEmbeddedData(field,v);if(typeof Qualtrics.SurveyEngine.setEmbeddedData==="function")Qualtrics.SurveyEngine.setEmbeddedData(field,v);}}
+function addLiveComment(list,text){var row=document.createElement('div');row.className='igfeed-livecomment';row.innerHTML='<div class="igfeed-commentavatar igfeed-commentavatar-fallback">YOU</div><div class="igfeed-commentbody"><div class="igfeed-commenttext"><strong>You</strong> '+String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div></div>';list.appendChild(row);} 
+document.querySelectorAll('.igfeed-post').forEach(function(postEl){var post=postEl.getAttribute('data-post');setED(post,'like',0);setED(post,'comment',0);setED(post,'comment_submitted',0);setED(post,'comment_text','');setED(post,'repost',0);setED(post,'direct',0);setED(post,'save',0);var btnLike=postEl.querySelector('[data-action="like"]'),btnComment=postEl.querySelector('[data-action="comment"]'),btnRepost=postEl.querySelector('[data-action="repost"]'),btnDirect=postEl.querySelector('[data-action="direct"]'),btnSave=postEl.querySelector('[data-action="save"]');if(btnLike){var sLike=0;btnLike.addEventListener('click',function(){sLike=sLike?0:1;btnLike.classList.toggle('is-liked',!!sLike);setED(post,'like',sLike);});}if(btnComment){var sComment=0;btnComment.addEventListener('click',function(){sComment=sComment?0:1;btnComment.classList.toggle('is-commented',!!sComment);setED(post,'comment',sComment);var commentsArea=postEl.querySelector('.igfeed-commentsarea');if(commentsArea) commentsArea.classList.toggle('is-visible',!!sComment);var input=postEl.querySelector('.igfeed-commentinput');if(input&&sComment) input.focus();});}if(btnRepost){var sRepost=0;btnRepost.addEventListener('click',function(){sRepost=sRepost?0:1;btnRepost.classList.toggle('is-reposted',!!sRepost);setED(post,'repost',sRepost);});}if(btnDirect){var sDirect=0;btnDirect.addEventListener('click',function(){sDirect=sDirect?0:1;btnDirect.classList.toggle('is-directed',!!sDirect);setED(post,'direct',sDirect);});}if(btnSave){var sSave=0;btnSave.addEventListener('click',function(){sSave=sSave?0:1;btnSave.classList.toggle('is-saved',!!sSave);setED(post,'save',sSave);});}
+var follow=postEl.querySelector('[data-action="follow"]');if(follow){setED(post,'follow',0);var f=0;follow.addEventListener('click',function(){f=f?0:1;follow.classList.toggle('is-following',!!f);follow.textContent=f?'Following':'Follow';setED(post,'follow',f);});}
+var cta=postEl.querySelector('[data-action="cta_click"]');if(cta){setED(post,'cta_click',0);cta.addEventListener('click',function(){setED(post,'cta_click',1);});}
+var aiBtn=postEl.querySelector('[data-action="ai_info_button"]'),aiBox=postEl.querySelector('.igfeed-aibox'),aiClose=postEl.querySelector('[data-action="ai_close"]');if(aiBtn&&aiBox){setED(post,'ai_info_opened',0);aiBtn.addEventListener('click',function(e){e.stopPropagation();aiBox.classList.toggle('is-visible');if(aiBox.classList.contains('is-visible'))setED(post,'ai_info_opened',1);});if(aiClose)aiClose.addEventListener('click',function(e){e.stopPropagation();aiBox.classList.remove('is-visible');});document.addEventListener('click',function(e){if(!aiBox.contains(e.target)&&!aiBtn.contains(e.target))aiBox.classList.remove('is-visible');});}
+var counter=postEl.querySelector('.igfeed-counter'),carousel=postEl.querySelector('.igfeed-carousel'),prev=postEl.querySelector('.igfeed-prev'),next=postEl.querySelector('.igfeed-next'),dots=postEl.querySelectorAll('.igfeed-dot');if(counter&&carousel){var total=dots.length||1,current=1;setED(post,'carousel_slide',1);setED(post,'carousel_second_seen',0);function upd(n){current=n;counter.textContent=n+'/'+total;dots.forEach(function(dot,i){dot.classList.toggle('on',i+1===n);});setED(post,'carousel_slide',n);if(n>1)setED(post,'carousel_second_seen',1);}function go(n){carousel.scrollTo({left:(n-1)*carousel.clientWidth,behavior:'smooth'});upd(n);}if(prev)prev.addEventListener('click',function(){go(current===1?total:current-1)});if(next)next.addEventListener('click',function(){go(current===total?1:current+1)});carousel.addEventListener('scroll',function(){window.clearTimeout(carousel._t);carousel._t=window.setTimeout(function(){var n=Math.round(carousel.scrollLeft/carousel.clientWidth)+1;n=Math.max(1,Math.min(total,n));upd(n);},80);});}
+var input=postEl.querySelector('.igfeed-commentinput'),submit=postEl.querySelector('.igfeed-commentsubmit'),list=postEl.querySelector('.igfeed-commentlist');if(input&&submit&&list){function submitComment(){var txt=(input.value||'').trim();if(!txt) return;var commentsArea=postEl.querySelector('.igfeed-commentsarea');if(commentsArea) commentsArea.classList.add('is-visible');addLiveComment(list,txt);setED(post,'comment_submitted',1);setED(post,'comment_text',txt);input.value='';}submit.addEventListener('click',submitComment);input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submitComment();}});}
+});})();<\/script></body></html>`
+}
+
+function update(){
+  const html=generated(), fs=fieldNames();
+  $('out').textContent=html;
+  $('fields').innerHTML=fs.length ? fs.map(f=>`<div>${esc(f)}</div>`).join('') : '<div>No fields: tracking disabled.</div>';
+  const frame = $('previewFrame');
+  if(frame) frame.srcdoc = html;
+}
+function dl(name,text){const b=new Blob([text],{type:'text/html;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u)}
+function init(){
+  $('addPostTop').onclick=()=>addPost();
+  ['feedTitle','prefix','track','jsprefix'].forEach(id=>{$(id).addEventListener('input',update);$(id).addEventListener('change',update)});
+  $('copy').onclick=()=>navigator.clipboard.writeText($('out').textContent).then(()=>{let b=$('copy');b.textContent='Copied!';setTimeout(()=>b.textContent='Copy generated feed HTML',1200)});
+  $('downStim').onclick=()=>dl('smslab_instagram_feed_stimulus.html',$('out').textContent);
+  $('downApp').onclick=()=>dl('smslab_instagram_feed_generator.html',document.documentElement.outerHTML);
+  addPost({cap:'Write your caption here.\n#Hashtag1 #Hashtag2'});
+}
+init();
+</script>
+</body>
+</html>
