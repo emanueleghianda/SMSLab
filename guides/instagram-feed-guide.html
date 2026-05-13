@@ -3,353 +3,530 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>How to create an Instagram-style feed stimulus - SMSLab</title>
+  <title>How to Use HTML Social Media Stimuli in Qualtrics - SMSLab</title>
   <style>
-:root{--bg:#f6f6f6;--card:#fff;--text:#111;--muted:#555;--line:#ddd;--soft:#f1f1f1}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6}
-.container{max-width:1080px;margin:0 auto;padding:0 20px}
-header{background:#fff;border-bottom:1px solid #e5e5e5}
-nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
-.logo{font-weight:850;font-size:20px;letter-spacing:-.03em}
-.logo a{color:#111;text-decoration:none}
-.nav{display:flex;gap:18px;flex-wrap:wrap}
-.nav a{color:#111;text-decoration:none;font-weight:650;font-size:14px}
-.article{background:#fff;border:1px solid var(--line);border-radius:22px;padding:32px;margin:28px 0;box-shadow:0 2px 10px rgba(0,0,0,.04)}
-.article h1{font-size:42px;line-height:1.08;letter-spacing:-.05em;margin:0 0 12px}
-.article h2{font-size:26px;letter-spacing:-.03em;margin:38px 0 12px}
-.article h3{font-size:19px;letter-spacing:-.02em;margin:26px 0 8px}
-.article p{color:#333;margin:0 0 14px}
-.article .lead{font-size:18px;color:#555;max-width:850px;margin-bottom:26px}
-.article ul,.article ol{color:#333;margin-top:8px;margin-bottom:18px}
-.article li{margin-bottom:8px}
-.article code{background:#f1f1f1;border-radius:7px;padding:2px 6px;font-size:.95em}
-.article pre{background:#111;color:#f4f4f4;border-radius:16px;padding:16px;overflow:auto;line-height:1.45;font-size:13px}
-.callout{background:#f7f7f7;border:1px solid #ddd;border-radius:16px;padding:16px;margin:18px 0}
-.callout strong{display:block;margin-bottom:6px}
-.tablewrap{overflow:auto;margin:18px 0}
-table{width:100%;border-collapse:collapse;background:#fff;font-size:14px}
-th,td{border:1px solid #ddd;padding:10px;text-align:left;vertical-align:top}
-th{background:#f1f1f1}
-.button{display:inline-block;background:#111;color:#fff;text-decoration:none;font-weight:750;border-radius:14px;padding:12px 18px;margin:16px 8px 4px 0}
-footer{padding:32px 0;color:#666;font-size:13px}
-@media(max-width:700px){.article{padding:22px}.article h1{font-size:34px}nav{align-items:flex-start;flex-direction:column}.nav{gap:12px}}
-</style>
+:root{--bg:#f6f6f4;--paper:#fff;--ink:#111;--muted:#5f6368;--line:#ddd;--soft:#f1f3f4;--accent:#111}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.62}.container{max-width:1180px;margin:0 auto;padding:0 22px}header{background:#fff;border-bottom:1px solid #e5e5e5}.nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}.logo a{color:#111;text-decoration:none;font-weight:850;font-size:20px;letter-spacing:-.03em}.links{display:flex;gap:18px;flex-wrap:wrap}.links a{color:#111;text-decoration:none;font-weight:650;font-size:14px}.hero{padding:54px 0 46px;border-bottom:1px solid #e8e8e8;background:#fff}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:850;color:#666;margin:0 0 12px}h1{font-size:46px;line-height:1.05;letter-spacing:-.055em;margin:0;max-width:900px}.hero p{font-size:18px;color:var(--muted);max-width:780px;margin:18px 0 0}.guide-shell{display:grid;grid-template-columns:280px minmax(0,1fr);gap:28px;padding:34px 0 52px}.toc{position:sticky;top:18px;align-self:start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;max-height:calc(100vh - 36px);overflow:auto}.toc h2{font-size:14px;margin:0 0 10px;letter-spacing:.02em}.toc a{display:block;color:#333;text-decoration:none;font-size:13px;line-height:1.35;padding:7px 0;border-top:1px solid #f0f0f0}.toc a:first-of-type{border-top:0}.toc a:hover{color:#000}.article{min-width:0}.guide-section{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px 26px;margin:0 0 18px;box-shadow:0 2px 10px rgba(0,0,0,.035)}.guide-section h2{font-size:24px;letter-spacing:-.035em;line-height:1.2;margin:0 0 14px}.guide-section h3{font-size:16px;margin:22px 0 8px;letter-spacing:-.01em}.guide-section p{margin:10px 0;color:#222}.guide-section ul,.guide-section ol{margin:12px 0 12px 22px;padding:0}.guide-section li{margin:5px 0}.guide-section pre{margin:14px 0;background:#111;color:#f4f4f4;border-radius:14px;padding:14px 16px;overflow:auto;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.guide-section code{font:inherit}.callout{background:#f7f7f7;border:1px solid #e4e4e4;border-radius:14px;padding:14px 16px;margin:14px 0;color:#222}.button{display:inline-block;background:#111;color:#fff;text-decoration:none;font-weight:750;border-radius:14px;padding:12px 18px;margin-top:12px}.generator-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:18px}.generator-card{display:flex;flex-direction:column;min-height:282px;background:#fff;border:1px solid var(--line);border-radius:22px;padding:20px;text-decoration:none;color:#111;box-shadow:0 2px 10px rgba(0,0,0,.04);transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}.generator-card:hover,.generator-card:focus{border-color:#b8b8b8;box-shadow:0 6px 22px rgba(0,0,0,.08);transform:translateY(-1px);outline:0}.platform-icon{width:42px;height:42px;display:block;margin-bottom:14px;object-fit:contain}.platform-icon.ig{border-radius:12px}.platform-icon.fb{border-radius:10px}.platform-icon.li{border-radius:6px}.platform-icon.x{border-radius:8px}.generator-card h3{margin:0 0 8px;font-size:18px;letter-spacing:-.02em;line-height:1.2;min-height:44px}.generator-card p{flex:1;margin:0 0 18px;color:var(--muted);font-size:14px;line-height:1.45}.generator-card .button{display:block;text-align:center;width:100%;margin:0}.footer-note{padding:30px 0;color:#666;font-size:13px}.footer-note a{color:#111}@media(max-width:1050px){.generator-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:900px){.guide-shell{grid-template-columns:1fr}.toc{position:static;max-height:none}h1{font-size:36px}}@media(max-width:620px){.generator-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-<header>
-  <div class="container">
-    <nav>
-      <div class="logo"><a href="../index.html">SMSLab</a></div>
-      <div class="nav">
-        <a href="../index.html#generators">Generators</a>
-        <a href="../index.html#guides">Guides</a>
-        <a href="../contact.html">Contact me</a>
-        <a href="../index.html#support">Support</a>
-      </div>
-    </nav>
-  </div>
-</header>
-
-<main class="container">
+<header><div class="container"><div class="nav"><div class="logo"><a href="../index.html">SMSLab</a></div><nav class="links"><a href="../index.html#generators">Generators</a><a href="../index.html#guides">Guides</a><a href="../contact.html">Contact me</a><a href="../index.html#support">Support</a></nav></div></div></header>
+<main>
+<section class="hero"><div class="container"><p class="eyebrow">SMSLab Guide</p><h1>How to Use HTML Social Media Stimuli in Qualtrics</h1><p>Practical guidance for using SMSLab stimuli in Qualtrics while keeping condition assignment and interaction tracking cleanly organized.</p></div></section>
+<div class="container guide-shell">
+<aside class="toc"><h2>Contents</h2>
+<a href="#section-1">1. What this guide is about</a>
+<a href="#section-2">2. Why use HTML stimuli instead of static images?</a>
+<a href="#section-3">3. When should you use HTML stimuli?</a>
+<a href="#section-4">4. What SMSLab generates</a>
+<a href="#section-5">5. Basic workflow</a>
+<a href="#section-6">6. Feed setup in SMSLab</a>
+<a href="#section-7">7. Prefix vs. experimental condition</a>
+<a href="#section-8">8. Should you change the prefix across conditions?</a>
+<a href="#section-9">9. Adding posts to the feed</a>
+<a href="#section-10">10. Post setup</a>
+<a href="#section-11">11. Labels and other options</a>
+<a href="#section-12">12. Prewritten comments</a>
+<a href="#section-13">13. Respondent comments</a>
+<a href="#section-14">14. Using the live preview</a>
+<a href="#section-15">15. Exporting the HTML</a>
+<a href="#section-16">16. Inserting the stimulus into Qualtrics</a>
+<a href="#section-17">17. Setting up interaction Embedded Data</a>
+<a href="#section-18">18. Setting up condition Embedded Data</a>
+<a href="#section-19">19. Example dataset structure</a>
+<a href="#section-20">20. Testing before data collection</a>
+<a href="#section-21">21. Common problems and solutions</a>
+<a href="#section-22">22. Methodological recommendations</a>
+<a href="#section-23">23. Suggested reporting in a methods section</a>
+<a href="#section-24">24. Final checklist</a>
+</aside>
 <article class="article">
-  <h1>How to create an Instagram-style feed stimulus</h1>
-  <p class="lead">
-    This guide explains how to use the SMSLab Instagram Feed Generator to create a realistic,
-    interactive Instagram-style feed stimulus for survey experiments in Qualtrics.
-  </p>
-
-  <div class="callout">
-    <strong>What this tool does</strong>
-    The generator creates a complete HTML stimulus that can be copied into Qualtrics. You can add
-    multiple posts, images, carousels, captions, labels, verified badges, comments, call-to-action
-    banners, and interactive icons. If needed, the stimulus can also record participant interactions
-    as Embedded Data.
-  </div>
-
-  <h2>1. Open the generator</h2>
-  <p>
-    From the SMSLab homepage, click <code>Open Instagram Feed Generator</code>. The generator opens
-    directly in your browser. No installation is required.
-  </p>
-  <p>
-    The generator has three main areas:
-  </p>
-  <ul>
-    <li><strong>Feed setup:</strong> general settings for the whole feed.</li>
-    <li><strong>Feed posts:</strong> the area where you create and edit each post.</li>
-    <li><strong>Live preview and generated HTML:</strong> the area where you check the final feed and copy the code.</li>
-  </ul>
-
-  <h2>2. Configure the feed setup</h2>
-  <p>
-    At the top of the generator, you will find the <code>Feed setup</code> section. This controls
-    the general settings of the feed.
-  </p>
-
-  <h3>Feed title</h3>
-  <p>
-    The feed title is used internally in the generated HTML file. Participants will normally not see it.
-    You can use a descriptive name such as:
-  </p>
-  <pre>Instagram feed stimulus - Study 1
-Positive feed condition
-Negative feed condition
-AI disclosure condition</pre>
-
-  <h3>Embedded Data prefix</h3>
-  <p>
-    The Embedded Data prefix determines the name of the variables that Qualtrics will save when
-    participants interact with the feed. The default prefix is:
-  </p>
-  <pre>igfeed</pre>
-  <p>
-    With this prefix, the generated variables may look like:
-  </p>
-  <pre>__js_igfeed_post1_like
-__js_igfeed_post1_comment
-__js_igfeed_post1_save
-__js_igfeed_post2_carousel_second_seen</pre>
-  <p>
-    If you create multiple feed versions, it may be useful to change the prefix so that each condition
-    is easy to identify in the dataset.
-  </p>
-  <pre>positive_feed
-negative_feed
-ai_feed
-human_feed</pre>
-
-  <h3>Interaction tracking</h3>
-  <p>
-    If <code>Enable interaction tracking for Qualtrics</code> is active, the HTML stimulus will try to
-    record participant actions such as likes, comments, saves, direct shares, reposts, carousel views,
-    clicks on AI Information, and clicks on call-to-action banners.
-  </p>
-  <p>
-    If you only need a visual stimulus and do not care about participant interactions, you can disable
-    tracking. The feed will still look the same, but it will not save click data.
-  </p>
-
-  <h2>3. Add posts to the feed</h2>
-  <p>
-    Click <code>Add post</code> to create a new post. You can add as many posts as you need.
-    Each post contains two sections:
-  </p>
-  <ul>
-    <li><code>Post setup</code></li>
-    <li><code>Labels and other options</code></li>
-  </ul>
-  <p>
-    An <code>Add post</code> button also appears after each post block. This allows you to insert a new
-    post directly below the current one.
-  </p>
-
-  <h2>4. Fill in the Post setup section</h2>
-  <p>
-    The <code>Post setup</code> section contains the basic content of the post.
-  </p>
-
-  <div class="tablewrap">
-    <table>
-      <thead>
-        <tr><th>Field</th><th>What it controls</th><th>Example</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Username</td><td>The account name shown at the top of the post.</td><td><code>brandname</code></td></tr>
-        <tr><td>Timestamp</td><td>The time/date label shown under the post.</td><td><code>2 hours ago</code></td></tr>
-        <tr><td>Profile image URL</td><td>The image used as the account profile picture.</td><td><code>https://example.com/profile.jpg</code></td></tr>
-        <tr><td>Post format</td><td>Choose between a single-image post and a carousel post.</td><td><code>Single image post</code></td></tr>
-        <tr><td>Image URL(s)</td><td>The image or images displayed in the post.</td><td>One URL per line for carousels.</td></tr>
-        <tr><td>Caption</td><td>The text displayed below the post.</td><td><code>New collection available now. #Fashion</code></td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h3>Single-image posts</h3>
-  <p>
-    If the post has only one image, select <code>Single image post</code> and paste one image URL.
-  </p>
-
-  <h3>Carousel posts</h3>
-  <p>
-    If the post should contain multiple images, select <code>Carousel post</code> and paste one image
-    URL per line.
-  </p>
-  <pre>https://example.com/image1.jpg
-https://example.com/image2.jpg
-https://example.com/image3.jpg</pre>
-  <p>
-    The generated post will include carousel arrows, a slide counter, and dots below the image.
-    If interaction tracking is active, Qualtrics can also record whether participants viewed the
-    second image or later.
-  </p>
-
-  <h2>5. Configure Labels and other options</h2>
-  <p>
-    The <code>Labels and other options</code> section allows you to add visual and interactive elements
-    to each post.
-  </p>
-
-  <h3>Follow button</h3>
-  <p>
-    The Follow button appears next to the username. If participants click it, the button changes to
-    <code>Following</code>. If tracking is active, the click is saved as Embedded Data.
-  </p>
-
-  <h3>Verified badge</h3>
-  <p>
-    Use <code>Show verified badge</code> to display a blue verification badge next to the username.
-    This can be useful when manipulating source credibility, account status, or perceived authenticity.
-  </p>
-
-  <h3>Location label</h3>
-  <p>
-    The location label appears below the username. Examples:
-  </p>
-  <pre>Milan, Italy
-London, United Kingdom
-New York, NY</pre>
-
-  <h3>Sponsored label</h3>
-  <p>
-    The sponsored label can be used to simulate advertising disclosure or paid partnership cues.
-    You can customize the text, for example:
-  </p>
-  <pre>Sponsored
-Paid partnership
-Advertisement</pre>
-
-  <h3>AI Information label</h3>
-  <p>
-    The AI Information option displays a clickable label under the username. When participants click
-    it, a small pop-up box opens. This is useful for experiments involving AI-generated or AI-assisted
-    content disclosures.
-  </p>
-  <pre>These images were generated using AI.</pre>
-
-  <h3>Learn more banner</h3>
-  <p>
-    The Learn more banner appears below the image. You can customize the text and optionally add a URL.
-    If a URL is provided, the banner becomes clickable.
-  </p>
-  <pre>Learn more
-Shop now
-Discover more
-Visit website</pre>
-
-  <h3>Likes and comments count</h3>
-  <p>
-    You can show or hide the number of likes and comments. These fields are useful if social proof
-    is part of your design, but they should be kept constant across conditions unless they are part
-    of the manipulation.
-  </p>
-
-  <h2>6. Add prewritten comments</h2>
-  <p>
-    For each post, you can add prewritten comments created by the experimenter. Each comment can include:
-  </p>
-  <ul>
-    <li>comment username;</li>
-    <li>comment profile image URL;</li>
-    <li>comment text.</li>
-  </ul>
-  <p>
-    In the generated feed, prewritten comments are hidden at first. They appear only when participants
-    click the comment icon for that specific post. This makes the stimulus more realistic and prevents
-    comments from attracting attention before participants interact with the post.
-  </p>
-
-  <h2>7. Allow participants to comment</h2>
-  <p>
-    When participants click the comment icon, the comment area opens. Participants can type a comment
-    in the <code>Add a comment...</code> field and submit it by pressing Enter or clicking <code>Post</code>.
-  </p>
-  <p>
-    If tracking is active, the generator can save:
-  </p>
-  <pre>__js_igfeed_post1_comment_submitted
-__js_igfeed_post1_comment_text</pre>
-  <p>
-    This allows you to know whether the participant submitted a comment and what text they entered.
-  </p>
-
-  <h2>8. Use the live preview</h2>
-  <p>
-    The live preview shows the feed as participants will see it. Use it to check:
-  </p>
-  <ul>
-    <li>post order;</li>
-    <li>image loading;</li>
-    <li>carousel behavior;</li>
-    <li>caption formatting;</li>
-    <li>verified badges and labels;</li>
-    <li>AI Information pop-up;</li>
-    <li>prewritten comments;</li>
-    <li>respondent comment field;</li>
-    <li>overall layout.</li>
-  </ul>
-
-  <h2>9. Export the generated feed</h2>
-  <p>
-    When the feed is ready, use one of the export buttons:
-  </p>
-  <ul>
-    <li><code>Copy generated feed HTML</code>: copies the full HTML code to your clipboard.</li>
-    <li><code>Download feed HTML</code>: downloads the feed as an HTML file.</li>
-    <li><code>Download this generator</code>: downloads a standalone copy of the generator itself.</li>
-  </ul>
-
-  <h2>10. Insert the feed into Qualtrics</h2>
-  <ol>
-    <li>Create a <code>Descriptive Text</code> question.</li>
-    <li>Open the question editor.</li>
-    <li>Switch to HTML/source view, often shown as <code>&lt;&gt;</code>.</li>
-    <li>Paste the full generated HTML code.</li>
-    <li>Save the question.</li>
-    <li>Preview the survey and check the feed.</li>
-  </ol>
-
-  <div class="callout">
-    <strong>Important</strong>
-    Use one generated feed per page/question. Placing multiple generated feeds on the same Qualtrics
-    page may create conflicts between scripts and interaction tracking.
-  </div>
-
-  <h2>11. Test before collecting data</h2>
-  <p>
-    Before launching your study, complete at least one full test response. Check that:
-  </p>
-  <ul>
-    <li>images load correctly;</li>
-    <li>carousel arrows work;</li>
-    <li>icons change color when clicked;</li>
-    <li>comments open only after clicking the comment icon;</li>
-    <li>participants can submit comments;</li>
-    <li>AI Information opens the correct pop-up;</li>
-    <li>Learn more banners work;</li>
-    <li>Embedded Data fields are saved in the dataset.</li>
-  </ul>
-
-  <h2>12. Methodological suggestions</h2>
-  <p>
-    If you use the generator for experimental designs, keep all non-manipulated elements constant
-    across conditions. For example, if you manipulate feed valence, keep constant:
-  </p>
-  <ul>
-    <li>number of posts;</li>
-    <li>order of posts;</li>
-    <li>position of the target post;</li>
-    <li>number of images;</li>
-    <li>caption length;</li>
-    <li>number of comments;</li>
-    <li>number of likes;</li>
-    <li>visual quality of images;</li>
-    <li>layout and labels not related to the manipulation.</li>
-  </ul>
-
-  <a class="button" href="../generators/smslab_instagram_feed_generator.html">Open Instagram Feed Generator</a>
-</article>
-</main>
-<footer><div class="container">SMSLab is an independent academic project.</div></footer>
-</body>
-</html>
+<section class="guide-section" id="section-1"><h2>1. What this guide is about</h2>
+<p>This guide explains how to use HTML-based social media stimuli in Qualtrics using SMSLab.</p>
+<p>SMSLab generates realistic, interactive Instagram-style feed stimuli that can be copied directly into Qualtrics. Unlike static images or screenshots, HTML stimuli allow participants to interact with the stimulus: they can click like, open comments, write comments, save posts, open AI Information labels, view carousel images, or click a call-to-action banner.</p>
+<p>The goal is to help researchers create social-media-style stimuli that are more realistic, flexible, and suitable for experimental research.</p>
+</section>
+<section class="guide-section" id="section-2"><h2>2. Why use HTML stimuli instead of static images?</h2>
+<p>Many survey experiments use static screenshots of social media posts. This is simple and often effective, but it has some limitations.</p>
+<p>A static image can show what a post looks like, but it cannot reproduce how people interact with social media content. Participants cannot click icons, open comments, scroll through a carousel, or submit a comment.</p>
+<p>HTML stimuli are useful when the interaction itself matters.</p>
+<p>For example, HTML stimuli can include:</p>
+<pre><code>                                clickable like icons
+                                clickable comment icons
+                                clickable repost/direct/save icons
+                                carousel navigation
+                                hidden comments that open when clicked
+                                AI Information pop-ups
+                                Learn more / Shop now banners
+                                participant-written comments
+                                interaction tracking through Qualtrics Embedded Data</code></pre>
+<p>This makes HTML stimuli especially useful for studies on social media advertising, influencer marketing, AI-generated content disclosure, sponsored content, brand communication, online engagement, comments, social proof, and platform interface cues.</p>
+</section>
+<section class="guide-section" id="section-3"><h2>3. When should you use HTML stimuli?</h2>
+<p>Use HTML stimuli when your study benefits from realism, interaction, or behavioral tracking.</p>
+<p>For example, HTML stimuli are useful if you want to know whether participants:</p>
+<pre><code>                                liked a post
+                                opened the comment section
+                                submitted a comment
+                                saved a post
+                                clicked a call-to-action banner
+                                opened an AI disclosure label
+                                viewed additional carousel images</code></pre>
+<p>If your study only requires participants to look at a post and answer questions, a static image may be enough. The advantage of HTML appears when you want the stimulus to behave more like a real social media interface.</p>
+</section>
+<section class="guide-section" id="section-4"><h2>4. What SMSLab generates</h2>
+<p>SMSLab generates a complete HTML stimulus. The output includes:</p>
+<pre><code>                                HTML structure
+                                CSS styling
+                                icons
+                                interactive JavaScript
+                                Qualtrics-compatible tracking code</code></pre>
+<p>The generated feed can include multiple posts. Each post can be customized with:</p>
+<pre><code>                                username
+                                profile image
+                                verified badge
+                                timestamp
+                                location label
+                                sponsored label
+                                AI Information label
+                                single image or carousel
+                                caption
+                                likes count
+                                comments count
+                                prewritten comments
+                                respondent comment field
+                                Learn more banner
+                                interactive icons</code></pre>
+<p>Once generated, the HTML can be copied into a Qualtrics Descriptive Text question.</p>
+</section>
+<section class="guide-section" id="section-5"><h2>5. Basic workflow</h2>
+<p>The general workflow is:</p>
+<pre><code>                                1. Create the feed in SMSLab.
+                                2. Copy or download the generated HTML.
+                                3. Create a Descriptive Text question in Qualtrics.
+                                4. Paste the generated HTML into the HTML/source view of the question.
+                                5. Add the required Embedded Data fields in Survey Flow.
+                                6. Add separate Embedded Data fields for the experimental condition.
+                                7. Preview and test the survey.
+                                8. Launch data collection.</code></pre>
+</section>
+<section class="guide-section" id="section-6"><h2>6. Feed setup in SMSLab</h2>
+<p>The first section of the generator is Feed setup.</p>
+<p>This section includes:</p>
+<pre><code>                                Feed title
+                                Embedded Data prefix
+                                Interaction tracking options</code></pre>
+<h3>Feed title</h3>
+<p>The Feed title is used internally in the generated HTML. Participants usually do not see it.</p>
+<p>Examples:</p>
+<pre><code>                                Instagram feed stimulus - Study 1
+                                Positive feed condition
+                                AI disclosure feed
+                                Sponsored content condition</code></pre>
+<h3>Embedded Data prefix</h3>
+<p>The Embedded Data prefix is used to name the variables that Qualtrics will save when participants interact with the feed.</p>
+<p>For example, if the prefix is:</p>
+<pre><code>                                igfeed</code></pre>
+<p>the interaction fields may look like:</p>
+<pre><code>                                __js_igfeed_post1_like
+                                __js_igfeed_post1_comment
+                                __js_igfeed_post1_save
+                                __js_igfeed_post2_carousel_second_seen</code></pre>
+<p>The prefix is only a naming tool. It helps organize the interaction variables created by the stimulus.</p>
+<div class="callout">It is important not to confuse the Embedded Data prefix with the experimental condition.</div>
+</section>
+<section class="guide-section" id="section-7"><h2>7. Prefix vs. experimental condition</h2>
+<p>The Embedded Data prefix does not identify the experimental condition.</p>
+<p>You should think of two separate types of Embedded Data:</p>
+<pre><code>                                1. Condition Embedded Data
+                                2. Interaction Embedded Data</code></pre>
+<p>Condition Embedded Data tells you which condition the participant was assigned to.</p>
+<p>Interaction Embedded Data tells you what the participant did inside the feed.</p>
+<p>For example, imagine a 2 &#215; 2 experiment:</p>
+<pre><code>                                AI disclosure: AI vs No AI
+                                Engagement level: High vs Low</code></pre>
+<p>In Qualtrics, you should create condition variables such as:</p>
+<pre><code>                                ai_disclosure = AI
+                                engagement_level = High
+                                condition = AI_HighEngagement</code></pre>
+<p>These variables identify the experimental condition.</p>
+<p>Separately, SMSLab can generate interaction variables such as:</p>
+<pre><code>                                __js_igfeed_post1_like
+                                __js_igfeed_post1_comment
+                                __js_igfeed_post1_save
+                                __js_igfeed_post1_carousel_second_seen</code></pre>
+<p>These variables identify participant behavior inside the feed.</p>
+<p>A dataset may therefore contain both:</p>
+<pre><code>                                condition = AI_HighEngagement
+                                ai_disclosure = AI
+                                engagement_level = High
+                                __js_igfeed_post1_like = 1
+                                __js_igfeed_post1_comment = 0
+                                __js_igfeed_post1_save = 1</code></pre>
+<p>The condition variables and the interaction variables serve different purposes.</p>
+</section>
+<section class="guide-section" id="section-8"><h2>8. Should you change the prefix across conditions?</h2>
+<p>In most experiments, no.</p>
+<p>If each participant sees only one feed, it is usually better to keep the same prefix across all experimental conditions.</p>
+<p>For example, use the same prefix:</p>
+<pre><code>                                igfeed</code></pre>
+<p>for all conditions.</p>
+<p>This means that every participant will have the same interaction columns in the dataset:</p>
+<pre><code>                                __js_igfeed_post1_like
+                                __js_igfeed_post1_comment
+                                __js_igfeed_post1_save</code></pre>
+<p>Then you analyze these interaction variables using your separate condition variables:</p>
+<pre><code>                                condition
+                                ai_disclosure
+                                engagement_level</code></pre>
+<p>This is usually cleaner than changing the prefix for each condition.</p>
+<h3>Recommended approach</h3>
+<p>For a between-subjects experiment where each participant sees only one feed:</p>
+<pre><code>                                Keep the same prefix across conditions.
+                                Use separate Embedded Data fields to store the condition.</code></pre>
+<p>Example:</p>
+<pre><code>                                Prefix: igfeed
+                                Condition Embedded Data:
+                                condition = AI_HighEngagement
+                                ai_disclosure = AI
+                                engagement_level = High
+                                Interaction Embedded Data:
+                                __js_igfeed_post1_like
+                                __js_igfeed_post1_comment
+                                __js_igfeed_post1_save</code></pre>
+<p>When should you change the prefix?</p>
+<p>Change the prefix only when the same participant sees multiple different feeds in the same survey and you need to store interactions separately.</p>
+<p>Example:</p>
+<pre><code>                                Prefix for first feed: feed1
+                                Prefix for second feed: feed2</code></pre>
+<p>This would produce:</p>
+<pre><code>                                __js_feed1_post1_like
+                                __js_feed1_post1_save
+                                __js_feed2_post1_like
+                                __js_feed2_post1_save</code></pre>
+<p>This is useful if one participant interacts with more than one feed and you want to know which interaction belongs to which feed.</p>
+</section>
+<section class="guide-section" id="section-9"><h2>9. Adding posts to the feed</h2>
+<p>Click Add post to add a new post.</p>
+<p>Each post is divided into two sections:</p>
+<pre><code>                                Post setup
+                                Labels and other options</code></pre>
+<p>You can add as many posts as needed.</p>
+<p>For experimental research, it is usually recommended to keep the number of posts constant across conditions unless the number of posts is part of the manipulation.</p>
+<p>For example, if Condition A contains five posts, Condition B should usually also contain five posts.</p>
+</section>
+<section class="guide-section" id="section-10"><h2>10. Post setup</h2>
+<p>The Post setup section contains the main content of each post.</p>
+<h3>Username</h3>
+<p>The account name displayed at the top of the post.</p>
+<p>Example:</p>
+<pre><code>                                urbanstyle_daily
+                                travelnotes
+                                brandname</code></pre>
+<h3>Timestamp</h3>
+<p>The time/date label associated with the post.</p>
+<p>Examples:</p>
+<pre><code>                                2 hours ago
+                                Yesterday
+                                May 2026</code></pre>
+<p>You can leave it empty if time is not relevant to the stimulus.</p>
+<h3>Profile image URL</h3>
+<p>The URL of the profile image shown next to the username.</p>
+<p>The image must be publicly accessible online.</p>
+<p>Example:</p>
+<pre><code>                                https://example.com/profile-image.jpg</code></pre>
+<h3>Post format</h3>
+<p>You can choose between:</p>
+<pre><code>                                Single image post
+                                Carousel post</code></pre>
+<p>Use Single image post when the post contains one image.</p>
+<p>Use Carousel post when the post contains multiple images.</p>
+<h3>Image URL(s)</h3>
+<p>For a single-image post, paste one image URL.</p>
+<p>For a carousel post, paste one image URL per line.</p>
+<p>Example:</p>
+<pre><code>                                https://example.com/image1.jpg
+                                https://example.com/image2.jpg
+                                https://example.com/image3.jpg</code></pre>
+<p>In the generated feed, carousel posts include navigation arrows, a slide counter, and carousel dots.</p>
+<h3>Caption</h3>
+<p>The text displayed below the post.</p>
+<p>Example:</p>
+<pre><code>                                A new way to experience urban style.
+                                #Fashion #Design #NewCollection</code></pre>
+<p>Hashtags are automatically styled in blue.</p>
+</section>
+<section class="guide-section" id="section-11"><h2>11. Labels and other options</h2>
+<p>The Labels and other options section allows you to add visual and interactive elements to each post.</p>
+<h3>Follow button</h3>
+<p>If enabled, the post displays a Follow button next to the username.</p>
+<p>When participants click it, it changes to:</p>
+<pre><code>                                Following</code></pre>
+<p>If tracking is active, this interaction can be saved.</p>
+<h3>Verified badge</h3>
+<p>If enabled, a blue verified badge appears next to the username.</p>
+<p>This can be useful for studies involving:</p>
+<pre><code>                                source credibility
+                                account status
+                                brand legitimacy
+                                influencer authenticity
+                                perceived trustworthiness</code></pre>
+<h3>Location label</h3>
+<p>The location label appears below the username.</p>
+<p>Examples:</p>
+<pre><code>                                Milan, Italy
+                                London, United Kingdom
+                                New York, NY</code></pre>
+<h3>Sponsored label</h3>
+<p>The sponsored label can simulate advertising disclosure.</p>
+<p>Examples:</p>
+<pre><code>                                Sponsored
+                                Advertisement
+                                Paid partnership</code></pre>
+<p>If sponsored disclosure is not part of the manipulation, keep it constant across conditions.</p>
+<h3>AI Information label</h3>
+<p>The AI Information option adds a clickable label under the username.</p>
+<p>When participants click it, a pop-up opens.</p>
+<p>Example message:</p>
+<pre><code>                                These images were generated using AI.</code></pre>
+<p>This is useful for studies about AI-generated content, AI disclosure, authenticity, synthetic media, or algorithmic transparency.</p>
+<h3>Learn more banner</h3>
+<p>The Learn more banner appears below the image and above the interaction icons.</p>
+<p>You can customize the text:</p>
+<pre><code>                                Learn more
+                                Shop now
+                                Discover more
+                                Visit website</code></pre>
+<p>You can also add a URL. If a URL is included, the banner becomes clickable.</p>
+<p>If tracking is active, SMSLab can save whether the participant clicked the banner.</p>
+<h3>Likes and comments count</h3>
+<p>You can display the number of likes and comments.</p>
+<p>Examples:</p>
+<pre><code>                                1,248 likes
+                                View all 36 comments</code></pre>
+<p>These are social proof cues. Keep them constant across conditions unless they are part of the manipulation.</p>
+</section>
+<section class="guide-section" id="section-12"><h2>12. Prewritten comments</h2>
+<p>For each post, you can add prewritten comments created by the experimenter.</p>
+<p>Each prewritten comment can include:</p>
+<pre><code>                                comment username
+                                comment profile image URL
+                                comment text</code></pre>
+<p>Example:</p>
+<pre><code>                                Username: user_01
+                                Profile image URL: https://example.com/profile.jpg
+                                Comment text: Love this post!</code></pre>
+<p>In the generated feed, prewritten comments are hidden by default. They appear only when the participant clicks the comment icon for that specific post.</p>
+<p>This makes the stimulus more realistic and prevents comments from attracting attention before participants choose to open them.</p>
+</section>
+<section class="guide-section" id="section-13"><h2>13. Respondent comments</h2>
+<p>Participants can also write their own comments.</p>
+<p>When participants click the comment icon, the comment area opens. They can type a comment into:</p>
+<pre><code>                                Add a comment...</code></pre>
+<p>and submit it by clicking:</p>
+<pre><code>                                Post</code></pre>
+<p>or pressing Enter.</p>
+<p>If interaction tracking is active, Qualtrics can save:</p>
+<pre><code>                                __js_igfeed_post1_comment_submitted
+                                __js_igfeed_post1_comment_text</code></pre>
+<p>This can be useful if written comments are part of the dependent variable, a behavioral indicator, or an exploratory measure.</p>
+</section>
+<section class="guide-section" id="section-14"><h2>14. Using the live preview</h2>
+<p>The live preview shows the feed as participants will see it.</p>
+<p>Use the preview to check:</p>
+<pre><code>                                post order
+                                image loading
+                                caption formatting
+                                verified badges
+                                sponsored labels
+                                AI Information pop-ups
+                                Learn more banners
+                                carousel navigation
+                                prewritten comments
+                                respondent comment area
+                                icon behavior
+                                overall layout</code></pre>
+<p>The preview helps identify errors before copying the generated HTML into Qualtrics.</p>
+</section>
+<section class="guide-section" id="section-15"><h2>15. Exporting the HTML</h2>
+<p>When the feed is ready, use one of the export buttons.</p>
+<p>Copy generated feed HTML copies the full HTML code to your clipboard.</p>
+<p>Download feed HTML downloads the generated stimulus as an HTML file.</p>
+<p>The generated HTML includes:</p>
+<pre><code>                                layout
+                                style
+                                images
+                                icons
+                                interaction logic
+                                comment behavior
+                                Qualtrics tracking script</code></pre>
+<div class="callout">Do not copy only part of the code. The full generated HTML is required.</div>
+</section>
+<section class="guide-section" id="section-16"><h2>16. Inserting the stimulus into Qualtrics</h2>
+<p>In Qualtrics:</p>
+<pre><code>                                1. Create or open your survey.
+                                2. Create a new block for the stimulus or condition.
+                                3. Add a Descriptive Text question.
+                                4. Open the Rich Content Editor.
+                                5. Switch to HTML/source view, often shown as &lt;&gt;.
+                                6. Paste the full generated HTML.
+                                7. Save the question.
+                                8. Preview the survey.</code></pre>
+<p>The stimulus should usually appear before manipulation checks, mediators, dependent variables, or other post-exposure measures.</p>
+</section>
+<section class="guide-section" id="section-17"><h2>17. Setting up interaction Embedded Data</h2>
+<p>If interaction tracking is enabled, SMSLab shows a list of Embedded Data fields.</p>
+<p>Examples:</p>
+<pre><code>                                __js_igfeed_post1_like
+                                __js_igfeed_post1_comment
+                                __js_igfeed_post1_comment_submitted
+                                __js_igfeed_post1_comment_text
+                                __js_igfeed_post1_repost
+                                __js_igfeed_post1_direct
+                                __js_igfeed_post1_save
+                                __js_igfeed_post1_carousel_slide
+                                __js_igfeed_post1_carousel_second_seen
+                                __js_igfeed_post1_ai_info_opened
+                                __js_igfeed_post1_cta_click</code></pre>
+<p>In Qualtrics, add these fields in Survey Flow.</p>
+<p>Step-by-step:</p>
+<pre><code>                                1. Go to Survey Flow.
+                                2. Click Add a New Element Here.
+                                3. Select Embedded Data.
+                                4. Add every field shown by SMSLab.
+                                5. Leave the values blank.
+                                6. Move the Embedded Data element above the block containing the stimulus.
+                                7. Save the Survey Flow.</code></pre>
+<p>The field names must match exactly.</p>
+</section>
+<section class="guide-section" id="section-18"><h2>18. Setting up condition Embedded Data</h2>
+<p>Interaction Embedded Data is not enough to identify the experimental condition.</p>
+<p>You should also add separate condition variables.</p>
+<p>For example, in a 2 &#215; 2 experiment:</p>
+<pre><code>                                AI disclosure: AI vs No AI
+                                Engagement level: High vs Low</code></pre>
+<p>you may create condition fields such as:</p>
+<pre><code>                                condition
+                                ai_disclosure
+                                engagement_level</code></pre>
+<p>For a participant assigned to the AI + High Engagement condition, the values could be:</p>
+<pre><code>                                condition = AI_HighEngagement
+                                ai_disclosure = AI
+                                engagement_level = High</code></pre>
+<p>For a participant assigned to the No AI + Low Engagement condition, the values could be:</p>
+<pre><code>                                condition = NoAI_LowEngagement
+                                ai_disclosure = NoAI
+                                engagement_level = Low</code></pre>
+<p>This allows you to analyze the effect of the manipulated factors while keeping interaction variables consistent across participants.</p>
+</section>
+<section class="guide-section" id="section-19"><h2>19. Example dataset structure</h2>
+<p>A clean dataset may contain both condition variables and interaction variables.</p>
+<p>Example:</p>
+<pre><code>                                condition = AI_HighEngagement
+                                ai_disclosure = AI
+                                engagement_level = High
+                                __js_igfeed_post1_like = 1
+                                __js_igfeed_post1_comment = 1
+                                __js_igfeed_post1_comment_submitted = 0
+                                __js_igfeed_post1_save = 1
+                                __js_igfeed_post1_ai_info_opened = 1</code></pre>
+<p>The condition variables tell you what the participant saw.</p>
+<p>The interaction variables tell you what the participant did.</p>
+</section>
+<section class="guide-section" id="section-20"><h2>20. Testing before data collection</h2>
+<div class="callout">Always complete a full test before launching data collection.</div>
+<div class="callout">Recommended test procedure:</div>
+<pre><code>                                1. Open the Qualtrics survey preview.
+                                2. View the feed stimulus.
+                                3. Click like, comment, repost, direct, save, and follow.
+                                4. Open the AI Information box if present.
+                                5. Click the Learn more banner if present.
+                                6. Scroll through carousel images if present.
+                                7. Submit a written comment.
+                                8. Complete the survey.
+                                9. Open the recorded response.
+                                10. Check whether Embedded Data fields contain the expected values.</code></pre>
+<p>Example expected result:</p>
+<pre><code>                                condition = AI_HighEngagement
+                                ai_disclosure = AI
+                                engagement_level = High
+                                __js_igfeed_post1_like = 1
+                                __js_igfeed_post1_comment = 1
+                                __js_igfeed_post1_comment_submitted = 1
+                                __js_igfeed_post1_comment_text = &quot;Interesting post!&quot;
+                                __js_igfeed_post1_save = 1
+                                __js_igfeed_post2_carousel_second_seen = 1</code></pre>
+</section>
+<section class="guide-section" id="section-21"><h2>21. Common problems and solutions</h2>
+<p>The stimulus does not appear correctly</p>
+<p>Check that the full HTML code was pasted into HTML/source view, not into the normal visual editor.</p>
+<p>Also check that all image URLs are public and accessible.</p>
+<p>The images do not load</p>
+<p>Make sure the image link points directly to an image file. Some links point to webpages rather than image files.</p>
+<p>The interaction fields are blank</p>
+<p>Check that:</p>
+<pre><code>                                the fields were added in Survey Flow
+                                the fields were placed before the stimulus block
+                                the field names match exactly
+                                the __js_ prefix is included when required
+                                the participant actually interacted with the stimulus
+                                a full test response was completed</code></pre>
+<p>The condition variable is missing</p>
+<p>Interaction tracking does not automatically create condition variables.</p>
+<p>You need to create condition Embedded Data separately in Survey Flow.</p>
+<p>The prefix is different across conditions</p>
+<p>This is not necessarily wrong, but it is often unnecessary.</p>
+<p>If each participant sees only one feed, use the same prefix across conditions and store the condition separately.</p>
+</section>
+<section class="guide-section" id="section-22"><h2>22. Methodological recommendations</h2>
+<p>For experimental research, keep all non-manipulated elements constant across conditions.</p>
+<p>If a feature is not part of the manipulation, keep it the same.</p>
+<p>Usually keep constant:</p>
+<pre><code>                                number of posts
+                                position of the target post
+                                number of images
+                                caption length
+                                profile image style
+                                number of comments
+                                number of likes
+                                presence of location labels
+                                presence of sponsored labels
+                                presence of verified badges
+                                visual quality of images
+                                layout and spacing
+                                Embedded Data prefix</code></pre>
+<p>Only change the elements that are part of the experimental manipulation.</p>
+<p>For example, if the manipulation is AI disclosure, the AI Information label should change across conditions, while the rest of the feed should remain as similar as possible.</p>
+</section>
+<section class="guide-section" id="section-23"><h2>23. Suggested reporting in a methods section</h2>
+<p>You can describe the stimulus creation process like this:</p>
+<pre><code>                                Experimental stimuli were created using SMSLab, an open-source tool for generating realistic social-media-style HTML stimuli for Qualtrics. The stimulus consisted of an Instagram-style feed containing multiple posts. The target post was embedded within the feed and included interactive interface elements such as like, comment, save, and carousel navigation. The HTML stimulus was inserted into Qualtrics using a Descriptive Text question.</code></pre>
+<p>If you used tracking, you can add:</p>
+<pre><code>                                The study also recorded behavioral interaction indicators through Qualtrics Embedded Data, including whether participants liked the post, opened the comment section, saved the post, viewed additional carousel images, clicked the call-to-action banner, opened the AI Information label, or submitted a written comment.</code></pre>
+<p>If you used experimental condition fields, you can add:</p>
+<pre><code>                                Experimental condition assignment was stored separately using Qualtrics Embedded Data fields, allowing interaction variables to be analyzed as behavioral responses within each condition.</code></pre>
+</section>
+<section class="guide-section" id="section-24"><h2>24. Final checklist</h2>
+<p>Before launching, check that:</p>
+<pre><code>                                the feed looks realistic
+                                all images load correctly
+                                all posts are in the correct order
+                                the target post is in the intended position
+                                the manipulation is visible but not too obvious
+                                non-manipulated features are constant across conditions
+                                the Embedded Data prefix is consistent across conditions when appropriate
+                                condition variables are created separately
+                                the generated HTML is pasted correctly into Qualtrics
+                                interaction Embedded Data fields are declared in Survey Flow
+                                the survey has been previewed and tested
+                                a test response shows the expected Embedded Data values</code></pre>
+<p>This workflow helps ensure that the stimulus is visually realistic, technically reliable, and methodologically controlled.</p>
+</section>
+<section class="guide-section"><h2>Try the generators!</h2><div class="generator-grid">
+<a class="generator-card" href="../generators/smslab_instagram_feed_generator.html"><img class="platform-icon ig" src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram logo" loading="lazy"><h3>Instagram Feed Generator</h3><p>Create Instagram-style feed stimuli with multiple posts, captions, comments, labels, call-to-action banners, and trackable interactions.</p><span class="button">Open generator</span></a>
+<a class="generator-card" href="../generators/smslab_facebook_feed_generator.html"><img class="platform-icon fb" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook logo" loading="lazy"><h3>Facebook Feed Generator</h3><p>Create Facebook-style feed stimuli with posts, reactions, comments, shares, sponsored labels, and trackable interactions.</p><span class="button">Open generator</span></a>
+<a class="generator-card" href="../generators/smslab_linkedin_feed_generator.html"><img class="platform-icon li" src="https://upload.wikimedia.org/wikipedia/commons/8/81/LinkedIn_icon.svg" alt="LinkedIn logo" loading="lazy"><h3>LinkedIn Feed Generator</h3><p>Create LinkedIn-style feed stimuli with professional headers, reactions, comments, reposts, sends, promoted labels, and tracking.</p><span class="button">Open generator</span></a>
+<a class="generator-card" href="../generators/smslab_x_feed_generator.html"><img class="platform-icon x" src="https://upload.wikimedia.org/wikipedia/commons/c/cc/X_icon.svg" alt="X logo" loading="lazy"><h3>X Feed Generator</h3><p>Create X-style feed stimuli with replies, reposts, likes, bookmarks, shares, promoted labels, view-style metrics, and tracking.</p><span class="button">Open generator</span></a>
+</div></section>
+</article></div></main>
+<footer class="footer-note"><div class="container"><p>SMSLab is an independent academic project. It is not affiliated with, endorsed by, or sponsored by Meta, Instagram, Facebook, LinkedIn, X, Qualtrics, or any other platform.</p><p><a href="../privacy.html">Privacy Policy</a> &middot; <a href="../disclaimer.html">Disclaimer</a></p></div></footer>
+</body></html>

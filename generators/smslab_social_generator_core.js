@@ -2,6 +2,8 @@
   const cfg=window.SMSLAB_PLATFORM;
   if(!cfg) return;
   const $=id=>document.getElementById(id);
+  const QUALTRICS_HTML_LIMIT=20000;
+  const SMSLAB_RUNTIME_BASE="https://socialmslab.netlify.app/generators/";
   let postUid=0;
 
   function esc(s){return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
@@ -346,12 +348,25 @@
     const postsMarkup=posts.length?posts.map(renderPost).join(""):`<p style="padding:16px;color:#666">Add at least one post.</p>`;
     return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(s.title)}</title>${generatedStyles()}</head><body>${renderChrome(postsMarkup)}${generatedScript(s)}</body></html>`;
   }
+  function runtimeUrl(file){
+    return SMSLAB_RUNTIME_BASE+file;
+  }
+  function generatedCompact(){
+    const s=feedSettings(),posts=getPosts();
+    const postsMarkup=posts.length?posts.map(renderPost).join(""):`<p style="padding:16px;color:#666">Add at least one post.</p>`;
+    return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(s.title)}</title><link rel="stylesheet" href="${attr(runtimeUrl("smslab_social_feed_runtime.css"))}"></head><body><div class="sg-root sg-${attr(cfg.key)}" data-smslab-social-feed data-platform="${attr(cfg.key)}" data-prefix="${attr(s.prefix)}" data-tracking="${s.track?"1":"0"}"><main class="sg-feed">${postsMarkup}</main></div><script src="${attr(runtimeUrl("smslab_social_feed_runtime.js"))}"><\/script></body></html>`;
+  }
+  function exportResult(fullHtml){
+    if(fullHtml.length<=QUALTRICS_HTML_LIMIT) return {html:fullHtml,mode:"full",fullLength:fullHtml.length};
+    const compact=generatedCompact();
+    return {html:compact,mode:"compact",fullLength:fullHtml.length};
+  }
 
   function update(){
-    const html=generated(),fs=fieldNames();
-    $("out").textContent=html;
+    const previewHtml=generated(),fs=fieldNames(),result=exportResult(previewHtml);
+    $("out").textContent=result.html;
     $("fields").innerHTML=fs.length?fs.map(f=>`<div>${esc(f)}</div>`).join(""):"<div>No fields: tracking disabled.</div>";
-    $("previewFrame").srcdoc=html;
+    $("previewFrame").srcdoc=previewHtml;
   }
   function dl(name,text){const b=new Blob([text],{type:"text/html;charset=utf-8"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u)}
   function init(){

@@ -69,7 +69,6 @@ code{background:#eee;border-radius:6px;padding:2px 5px}
         <button id="addPostTop" type="button">Add post</button>
         <button class="secondary" id="copy" type="button">Copy generated feed HTML</button>
         <button class="secondary" id="downStim" type="button">Download feed HTML</button>
-        <button class="secondary" id="downApp" type="button">Download this generator</button>
       </div>
     </div>
 
@@ -103,7 +102,7 @@ code{background:#eee;border-radius:6px;padding:2px 5px}
       <ol class="muted">
         <li>Create a Descriptive Text question for the feed stimulus.</li>
         <li>Open HTML/source view, usually <code>&lt;&gt;</code>.</li>
-        <li>Paste the full generated feed HTML.</li>
+        <li>Paste the generated feed HTML.</li>
         <li>Add the Embedded Data fields above in Survey Flow before the stimulus block.</li>
         <li>Preview the survey, interact with posts, complete the survey, and verify the recorded values in the response data.</li>
       </ol>
@@ -113,6 +112,8 @@ code{background:#eee;border-radius:6px;padding:2px 5px}
 
 <script>
 const $=id=>document.getElementById(id);
+const QUALTRICS_HTML_LIMIT=20000;
+const SMSLAB_RUNTIME_BASE='https://socialmslab.netlify.app/generators/';
 let postUid=0;
 
 function esc(s){return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
@@ -399,12 +400,25 @@ var input=postEl.querySelector('.igfeed-commentinput'),submit=postEl.querySelect
 });})();<\/script></body></html>`
 }
 
+function runtimeUrl(file){
+  return SMSLAB_RUNTIME_BASE+file;
+}
+function generatedCompact(){
+  const s=feedSettings(), posts=getPosts();
+  const postsMarkup = posts.length ? posts.map(postHtml).join('') : `<p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#666;padding:16px">Add at least one post.</p>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(s.title)}</title><link rel="stylesheet" href="${esc(runtimeUrl('smslab_instagram_feed_runtime.css'))}"></head><body><div class="igfeed-feed" data-smslab-igfeed data-prefix="${esc(s.prefix)}" data-tracking="${s.track?'1':'0'}">${postsMarkup}</div><script src="${esc(runtimeUrl('smslab_instagram_feed_runtime.js'))}"><\/script></body></html>`;
+}
+function exportResult(fullHtml){
+  if(fullHtml.length<=QUALTRICS_HTML_LIMIT) return {html:fullHtml,mode:'full',fullLength:fullHtml.length};
+  const compact=generatedCompact();
+  return {html:compact,mode:'compact',fullLength:fullHtml.length};
+}
 function update(){
-  const html=generated(), fs=fieldNames();
-  $('out').textContent=html;
+  const previewHtml=generated(), fs=fieldNames(), result=exportResult(previewHtml);
+  $('out').textContent=result.html;
   $('fields').innerHTML=fs.length ? fs.map(f=>`<div>${esc(f)}</div>`).join('') : '<div>No fields: tracking disabled.</div>';
   const frame = $('previewFrame');
-  if(frame) frame.srcdoc = html;
+  if(frame) frame.srcdoc = previewHtml;
 }
 function dl(name,text){const b=new Blob([text],{type:'text/html;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u)}
 function init(){
@@ -412,7 +426,6 @@ function init(){
   ['feedTitle','prefix','track','jsprefix'].forEach(id=>{$(id).addEventListener('input',update);$(id).addEventListener('change',update)});
   $('copy').onclick=()=>navigator.clipboard.writeText($('out').textContent).then(()=>{let b=$('copy');b.textContent='Copied!';setTimeout(()=>b.textContent='Copy generated feed HTML',1200)});
   $('downStim').onclick=()=>dl('smslab_instagram_feed_stimulus.html',$('out').textContent);
-  $('downApp').onclick=()=>dl('smslab_instagram_feed_generator.html',document.documentElement.outerHTML);
   addPost({cap:'Write your caption here.\n#Hashtag1 #Hashtag2'});
 }
 init();

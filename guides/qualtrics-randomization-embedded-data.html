@@ -5,298 +5,853 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Randomization and Embedded Data in Qualtrics - SMSLab</title>
   <style>
-:root{--bg:#f6f6f6;--card:#fff;--text:#111;--muted:#555;--line:#ddd;--soft:#f1f1f1}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6}
-.container{max-width:1080px;margin:0 auto;padding:0 20px}
-header{background:#fff;border-bottom:1px solid #e5e5e5}
-nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
-.logo{font-weight:850;font-size:20px;letter-spacing:-.03em}
-.logo a{color:#111;text-decoration:none}
-.nav{display:flex;gap:18px;flex-wrap:wrap}
-.nav a{color:#111;text-decoration:none;font-weight:650;font-size:14px}
-.article{background:#fff;border:1px solid var(--line);border-radius:22px;padding:32px;margin:28px 0;box-shadow:0 2px 10px rgba(0,0,0,.04)}
-.article h1{font-size:42px;line-height:1.08;letter-spacing:-.05em;margin:0 0 12px}
-.article h2{font-size:26px;letter-spacing:-.03em;margin:38px 0 12px}
-.article h3{font-size:19px;letter-spacing:-.02em;margin:26px 0 8px}
-.article p{color:#333;margin:0 0 14px}
-.article .lead{font-size:18px;color:#555;max-width:850px;margin-bottom:26px}
-.article ul,.article ol{color:#333;margin-top:8px;margin-bottom:18px}
-.article li{margin-bottom:8px}
-.article code{background:#f1f1f1;border-radius:7px;padding:2px 6px;font-size:.95em}
-.article pre{background:#111;color:#f4f4f4;border-radius:16px;padding:16px;overflow:auto;line-height:1.45;font-size:13px}
-.callout{background:#f7f7f7;border:1px solid #ddd;border-radius:16px;padding:16px;margin:18px 0}
-.callout strong{display:block;margin-bottom:6px}
-.tablewrap{overflow:auto;margin:18px 0}
-table{width:100%;border-collapse:collapse;background:#fff;font-size:14px}
-th,td{border:1px solid #ddd;padding:10px;text-align:left;vertical-align:top}
-th{background:#f1f1f1}
-.button{display:inline-block;background:#111;color:#fff;text-decoration:none;font-weight:750;border-radius:14px;padding:12px 18px;margin:16px 8px 4px 0}
-footer{padding:32px 0;color:#666;font-size:13px}
-@media(max-width:700px){.article{padding:22px}.article h1{font-size:34px}nav{align-items:flex-start;flex-direction:column}.nav{gap:12px}}
-</style>
+:root{--bg:#f6f6f4;--paper:#fff;--ink:#111;--muted:#5f6368;--line:#ddd;--soft:#f1f3f4;--accent:#111}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.62}.container{max-width:1180px;margin:0 auto;padding:0 22px}header{background:#fff;border-bottom:1px solid #e5e5e5}.nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}.logo a{color:#111;text-decoration:none;font-weight:850;font-size:20px;letter-spacing:-.03em}.links{display:flex;gap:18px;flex-wrap:wrap}.links a{color:#111;text-decoration:none;font-weight:650;font-size:14px}.hero{padding:54px 0 46px;border-bottom:1px solid #e8e8e8;background:#fff}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:850;color:#666;margin:0 0 12px}h1{font-size:46px;line-height:1.05;letter-spacing:-.055em;margin:0;max-width:900px}.hero p{font-size:18px;color:var(--muted);max-width:780px;margin:18px 0 0}.guide-shell{display:grid;grid-template-columns:280px minmax(0,1fr);gap:28px;padding:34px 0 52px}.toc{position:sticky;top:18px;align-self:start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;max-height:calc(100vh - 36px);overflow:auto}.toc h2{font-size:14px;margin:0 0 10px;letter-spacing:.02em}.toc a{display:block;color:#333;text-decoration:none;font-size:13px;line-height:1.35;padding:7px 0;border-top:1px solid #f0f0f0}.toc a:first-of-type{border-top:0}.toc a:hover{color:#000}.article{min-width:0}.guide-section{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px 26px;margin:0 0 18px;box-shadow:0 2px 10px rgba(0,0,0,.035)}.guide-section h2{font-size:24px;letter-spacing:-.035em;line-height:1.2;margin:0 0 14px}.guide-section h3{font-size:16px;margin:22px 0 8px;letter-spacing:-.01em}.guide-section p{margin:10px 0;color:#222}.guide-section ul,.guide-section ol{margin:12px 0 12px 22px;padding:0}.guide-section li{margin:5px 0}.guide-section pre{margin:14px 0;background:#111;color:#f4f4f4;border-radius:14px;padding:14px 16px;overflow:auto;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.guide-section code{font:inherit}.callout{background:#f7f7f7;border:1px solid #e4e4e4;border-radius:14px;padding:14px 16px;margin:14px 0;color:#222}.button{display:inline-block;background:#111;color:#fff;text-decoration:none;font-weight:750;border-radius:14px;padding:12px 18px;margin-top:12px}.generator-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:18px}.generator-card{display:flex;flex-direction:column;min-height:282px;background:#fff;border:1px solid var(--line);border-radius:22px;padding:20px;text-decoration:none;color:#111;box-shadow:0 2px 10px rgba(0,0,0,.04);transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}.generator-card:hover,.generator-card:focus{border-color:#b8b8b8;box-shadow:0 6px 22px rgba(0,0,0,.08);transform:translateY(-1px);outline:0}.platform-icon{width:42px;height:42px;display:block;margin-bottom:14px;object-fit:contain}.platform-icon.ig{border-radius:12px}.platform-icon.fb{border-radius:10px}.platform-icon.li{border-radius:6px}.platform-icon.x{border-radius:8px}.generator-card h3{margin:0 0 8px;font-size:18px;letter-spacing:-.02em;line-height:1.2;min-height:44px}.generator-card p{flex:1;margin:0 0 18px;color:var(--muted);font-size:14px;line-height:1.45}.generator-card .button{display:block;text-align:center;width:100%;margin:0}.footer-note{padding:30px 0;color:#666;font-size:13px}.footer-note a{color:#111}@media(max-width:1050px){.generator-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:900px){.guide-shell{grid-template-columns:1fr}.toc{position:static;max-height:none}h1{font-size:36px}}@media(max-width:620px){.generator-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-<header>
-  <div class="container">
-    <nav>
-      <div class="logo"><a href="../index.html">SMSLab</a></div>
-      <div class="nav">
-        <a href="../index.html#generators">Generators</a>
-        <a href="../index.html#guides">Guides</a>
-        <a href="../contact.html">Contact me</a>
-        <a href="../index.html#support">Support</a>
-      </div>
-    </nav>
-  </div>
-</header>
-
-<main class="container">
+<header><div class="container"><div class="nav"><div class="logo"><a href="../index.html">SMSLab</a></div><nav class="links"><a href="../index.html#generators">Generators</a><a href="../index.html#guides">Guides</a><a href="../contact.html">Contact me</a><a href="../index.html#support">Support</a></nav></div></div></header>
+<main>
+<section class="hero"><div class="container"><p class="eyebrow">SMSLab Guide</p><h1>Randomization and Embedded Data in Qualtrics</h1><p>Practical guidance for using SMSLab stimuli in Qualtrics while keeping condition assignment and interaction tracking cleanly organized.</p></div></section>
+<div class="container guide-shell">
+<aside class="toc"><h2>Contents</h2>
+<a href="#section-1">1. What this guide is about</a>
+<a href="#section-2">2. Randomization vs. tracking</a>
+<a href="#section-3">3. The basic structure</a>
+<a href="#section-4">4. Why each condition should usually be a group</a>
+<a href="#section-5">5. Example 1: simple two-condition experiment</a>
+<a href="#section-6">6. Example 2: 2 &#215; 2 factorial design</a>
+<a href="#section-7">7. Example 3: 2 &#215; 3 design</a>
+<a href="#section-8">8. Why factor-level Embedded Data are useful</a>
+<a href="#section-9">9. Where to place interaction Embedded Data fields</a>
+<a href="#section-10">10. Where to place condition Embedded Data fields</a>
+<a href="#section-11">11. Recommended Survey Flow template</a>
+<a href="#section-12">12. Step-by-step: creating the structure in Qualtrics</a>
+<a href="#section-13">13. One-factor design example</a>
+<a href="#section-14">14. Two-factor design example</a>
+<a href="#section-15">15. Three-factor design example</a>
+<a href="#section-16">16. Should the Embedded Data prefix change across conditions?</a>
+<a href="#section-17">17. Between-subjects vs. within-subjects designs</a>
+<a href="#section-18">18. Randomizing order vs. randomizing assignment</a>
+<a href="#section-19">19. Interaction fields for conditions with different numbers of posts</a>
+<a href="#section-20">20. Naming conventions</a>
+<a href="#section-21">21. Testing the randomization</a>
+<a href="#section-22">22. Common mistakes</a>
+<a href="#section-23">23. Recommended workflow for a 2 &#215; 2 experiment</a>
+<a href="#section-24">24. Suggested reporting in a methods section</a>
+<a href="#section-25">25. Final checklist</a>
+</aside>
 <article class="article">
-  <h1>Randomization and Embedded Data in Qualtrics</h1>
-  <p class="lead">
-    This guide explains how to randomize experimental conditions in Qualtrics and how to save
-    participant interactions with SMSLab stimuli using Embedded Data.
-  </p>
-
-  <div class="callout">
-    <strong>What you will learn</strong>
-    You will learn how to set up one condition per block, randomize participants across conditions,
-    declare Embedded Data fields, and verify that interaction data are correctly saved in your dataset.
-  </div>
-
-  <h2>1. Why Embedded Data matters</h2>
-  <p>
-    SMSLab stimuli can record interactions such as likes, comments, reposts, direct shares, saves,
-    carousel views, clicks on AI Information, clicks on Learn more banners, and comments submitted
-    by respondents.
-  </p>
-  <p>
-    In Qualtrics, these values are stored as <code>Embedded Data</code>. Embedded Data fields behave
-    like variables in your final dataset. They do not need to be shown to participants.
-  </p>
-
-  <h2>2. Understand the field names</h2>
-  <p>
-    The generator displays a list of fields that should be added to Qualtrics Survey Flow. Examples:
-  </p>
-  <pre>__js_igfeed_post1_like
+<section class="guide-section" id="section-1"><h2>1. What this guide is about</h2>
+<p>This guide explains how to randomize experimental conditions in Qualtrics when using SMSLab stimuli.</p>
+<p>The focus is on a practical workflow:</p>
+<ol>
+<li>Create one stimulus version per condition.</li>
+<li>Create one Qualtrics block per condition.</li>
+<li>Add the corresponding HTML stimulus inside each block.</li>
+<li>Add Embedded Data fields to record the assigned condition.</li>
+<li>Use the Qualtrics Randomizer to assign participants to one condition.</li>
+<li>Add the interaction Embedded Data fields generated by SMSLab.</li>
+<li>Test that both condition assignment and interaction tracking are correctly saved.</li>
+</ol>
+<p>The main idea is simple: Qualtrics should know both what condition the participant saw and what the participant did inside the stimulus.</p>
+</section>
+<section class="guide-section" id="section-2"><h2>2. Randomization vs. tracking</h2>
+<p>When using SMSLab stimuli in Qualtrics, you usually deal with two different types of information.</p>
+<p>The first is condition information. This tells you which experimental condition the participant was assigned to.</p>
+<p>Example:</p>
+<pre><code>condition = AI_Disclosure
+disclosure = AI
+source = Brand</code></pre>
+<p>The second is interaction information. This tells you what the participant did inside the stimulus.</p>
+<p>Example:</p>
+<pre><code>__js_igfeed_post1_like = 1
+__js_igfeed_post1_comment = 0
+__js_igfeed_post1_save = 1</code></pre>
+<p>These two types of information should be stored separately.</p>
+<p>Condition Embedded Data is created by you in Qualtrics.</p>
+<p>Interaction Embedded Data is generated by SMSLab and should be declared in Qualtrics Survey Flow.</p>
+<p>Qualtrics Survey Flow allows you to add elements such as Embedded Data, Randomizers, Branches, and Groups; the Randomizer can randomly present blocks, Embedded Data, and other Survey Flow elements to respondents. (Qualtrics)</p>
+</section>
+<section class="guide-section" id="section-3"><h2>3. The basic structure</h2>
+<p>A clean SMSLab experiment in Qualtrics usually has this structure:</p>
+<pre><code>Survey Flow</code></pre>
+<p>Embedded Data: interaction fields</p>
+<pre><code>  __js_igfeed_post1_like
+  __js_igfeed_post1_comment
+  __js_igfeed_post1_save
+  ...</code></pre>
+<p>Randomizer: randomly present 1 of the following elements</p>
+<pre><code>  Group: Condition 1
+    Embedded Data: condition = condition_1
+    Block: Stimulus Condition 1
+  Group: Condition 2
+    Embedded Data: condition = condition_2
+    Block: Stimulus Condition 2</code></pre>
+<ul>
+<li>Outcome measures</li>
+<li>Manipulation checks</li>
+<li>Demographics</li>
+<li>End of survey</li>
+</ul>
+<p>This structure does three things:</p>
+<ol>
+<li>It prepares the interaction fields before the participant sees the stimulus.</li>
+<li>It randomly assigns the participant to one condition.</li>
+<li>It saves the assigned condition in the dataset.</li>
+</ol>
+<p>The Group element is useful because it keeps together the condition Embedded Data and the block containing the stimulus. Qualtrics supports Groups in Survey Flow to group different Survey Flow elements together. (Qualtrics)</p>
+</section>
+<section class="guide-section" id="section-4"><h2>4. Why each condition should usually be a group</h2>
+<p>For each experimental condition, you should create a group that contains:</p>
+<ol>
+<li>The Embedded Data values identifying that condition.</li>
+<li>The block containing the corresponding SMSLab stimulus.</li>
+</ol>
+<div class="callout">This is important because the condition variable must be set before or together with the stimulus block assigned to the participant.</div>
+<p>For example:</p>
+<p>Group: Condition A</p>
+<pre><code>  Embedded Data:
+    condition = A
+  Block:
+    Instagram feed stimulus - Condition A</code></pre>
+<p>For a simple two-condition experiment:</p>
+<p>Group: Control</p>
+<pre><code>  Embedded Data:
+    condition = control
+  Block:
+    Control feed</code></pre>
+<p>Group: Treatment</p>
+<pre><code>  Embedded Data:
+    condition = treatment
+  Block:
+    Treatment feed</code></pre>
+<p>Then both groups go inside the Randomizer.</p>
+</section>
+<section class="guide-section" id="section-5"><h2>5. Example 1: simple two-condition experiment</h2>
+<p>Imagine a study testing whether an AI disclosure affects consumers’ perception of a social media post.</p>
+<p>You have two conditions:</p>
+<ul>
+<li>Condition 1: No AI disclosure</li>
+<li>Condition 2: AI disclosure</li>
+</ul>
+<p>You should create two feed versions in SMSLab:</p>
+<ul>
+<li>Feed 1: No AI disclosure</li>
+<li>Feed 2: AI disclosure</li>
+</ul>
+<p>Then, in Qualtrics, create two blocks:</p>
+<ul>
+<li>Block: Feed - No AI disclosure</li>
+<li>Block: Feed - AI disclosure</li>
+</ul>
+<p>Inside each block, add a Descriptive Text question and paste the corresponding generated HTML stimulus.</p>
+<p>Your Survey Flow should look like this:</p>
+<p>Embedded Data: SMSLab interaction fields</p>
+<pre><code>  __js_igfeed_post1_like
+  __js_igfeed_post1_comment
+  __js_igfeed_post1_save
+  __js_igfeed_post1_ai_info_opened
+  ...</code></pre>
+<p>Randomizer: randomly present 1 of the following elements</p>
+<pre><code>  Group: No AI disclosure
+    Embedded Data:
+      condition = no_ai_disclosure
+      ai_disclosure = no
+    Block:
+      Feed - No AI disclosure
+  Group: AI disclosure
+    Embedded Data:
+      condition = ai_disclosure
+      ai_disclosure = yes
+    Block:
+      Feed - AI disclosure
+Block:
+  Manipulation checks
+Block:
+  Dependent variables</code></pre>
+<p>In the final dataset, a participant assigned to the AI disclosure condition may have:</p>
+<pre><code>condition = ai_disclosure
+ai_disclosure = yes
+__js_igfeed_post1_like = 1
+__js_igfeed_post1_comment = 0
+__js_igfeed_post1_ai_info_opened = 1</code></pre>
+<p>This tells you that the participant saw the AI disclosure condition and opened the AI Information label.</p>
+</section>
+<section class="guide-section" id="section-6"><h2>6. Example 2: 2 &#215; 2 factorial design</h2>
+<p>Now imagine a 2 &#215; 2 experiment.</p>
+<p>The factors are:</p>
+<ul>
+<li>Disclosure: AI disclosure vs No AI disclosure</li>
+<li>Engagement: High engagement vs Low engagement</li>
+</ul>
+<p>This creates four conditions:</p>
+<ul>
+<li>Condition 1: AI disclosure + High engagement</li>
+<li>Condition 2: AI disclosure + Low engagement</li>
+<li>Condition 3: No AI disclosure + High engagement</li>
+<li>Condition 4: No AI disclosure + Low engagement</li>
+</ul>
+<p>You should create four stimulus versions in SMSLab:</p>
+<ul>
+<li>Feed 1: AI disclosure + High engagement</li>
+<li>Feed 2: AI disclosure + Low engagement</li>
+<li>Feed 3: No AI disclosure + High engagement</li>
+<li>Feed 4: No AI disclosure + Low engagement</li>
+</ul>
+<p>Then create four Qualtrics blocks:</p>
+<ul>
+<li>Block: AI disclosure - High engagement</li>
+<li>Block: AI disclosure - Low engagement</li>
+<li>Block: No AI disclosure - High engagement</li>
+<li>Block: No AI disclosure - Low engagement</li>
+</ul>
+<p>Each block contains the corresponding HTML stimulus.</p>
+<p>In Survey Flow, use one Randomizer that presents one of four groups:</p>
+<p>Embedded Data: SMSLab interaction fields</p>
+<pre><code>  __js_igfeed_post1_like
+  __js_igfeed_post1_comment
+  __js_igfeed_post1_save
+  __js_igfeed_post1_carousel_second_seen
+  ...</code></pre>
+<p>Randomizer: randomly present 1 of the following elements</p>
+<pre><code>  Group: AI disclosure + High engagement
+    Embedded Data:
+      condition = AI_High
+      disclosure = AI
+      engagement = High
+    Block:
+      AI disclosure - High engagement
+  Group: AI disclosure + Low engagement
+    Embedded Data:
+      condition = AI_Low
+      disclosure = AI
+      engagement = Low
+    Block:
+      AI disclosure - Low engagement
+  Group: No AI disclosure + High engagement
+    Embedded Data:
+      condition = NoAI_High
+      disclosure = NoAI
+      engagement = High
+    Block:
+      No AI disclosure - High engagement
+  Group: No AI disclosure + Low engagement
+    Embedded Data:
+      condition = NoAI_Low
+      disclosure = NoAI
+      engagement = Low
+    Block:
+      No AI disclosure - Low engagement</code></pre>
+<p>This creates a clean dataset because each participant has:</p>
+<pre><code>condition
+disclosure
+engagement</code></pre>
+<ul>
+<li>interaction variables</li>
+<li>dependent variables</li>
+</ul>
+<p>For example:</p>
+<pre><code>condition = AI_High
+disclosure = AI
+engagement = High
+__js_igfeed_post1_like = 1
+__js_igfeed_post1_save = 0</code></pre>
+<p>This is better than storing only a single condition variable, because separate factor variables make analysis easier.</p>
+</section>
+<section class="guide-section" id="section-7"><h2>7. Example 3: 2 &#215; 3 design</h2>
+<p>Suppose you have a 2 &#215; 3 design.</p>
+<p>The factors are:</p>
+<ul>
+<li>Disclosure: AI vs Human</li>
+<li>Message tone: Emotional vs Functional vs Neutral</li>
+</ul>
+<p>This creates six conditions:</p>
+<ul>
+<li>AI + Emotional</li>
+<li>AI + Functional</li>
+<li>AI + Neutral</li>
+<li>Human + Emotional</li>
+<li>Human + Functional</li>
+<li>Human + Neutral</li>
+</ul>
+<p>In this case, create six SMSLab stimuli and six Qualtrics blocks.</p>
+<p>Your condition Embedded Data should include:</p>
+<pre><code>condition
+disclosure
+tone</code></pre>
+<p>For example:</p>
+<p>Group: AI + Emotional</p>
+<pre><code>  Embedded Data:
+    condition = AI_Emotional
+    disclosure = AI
+    tone = Emotional
+  Block:
+    Feed - AI Emotional</code></pre>
+<p>Another group:</p>
+<p>Group: Human + Functional</p>
+<pre><code>  Embedded Data:
+    condition = Human_Functional
+    disclosure = Human
+    tone = Functional
+  Block:
+    Feed - Human Functional</code></pre>
+<p>This makes the final dataset easier to use in ANOVA, regression, PROCESS, SEM, or other analyses.</p>
+</section>
+<section class="guide-section" id="section-8"><h2>8. Why factor-level Embedded Data are useful</h2>
+<p>For factorial designs, do not rely only on a single condition field.</p>
+<p>You can save:</p>
+<pre><code>condition = AI_High</code></pre>
+<p>but it is also useful to save:</p>
+<pre><code>disclosure = AI
+engagement = High</code></pre>
+<p>This helps during analysis because you can directly test main effects and interactions.</p>
+<p>For a 2 &#215; 2 design, recommended condition fields are:</p>
+<pre><code>condition</code></pre>
+<ul>
+<li>factor1</li>
+<li>factor2</li>
+</ul>
+<p>Example:</p>
+<pre><code>condition = AI_High
+disclosure = AI
+engagement = High</code></pre>
+<p>For a 2 &#215; 2 &#215; 2 design, use:</p>
+<pre><code>condition</code></pre>
+<ul>
+<li>factor1</li>
+<li>factor2</li>
+<li>factor3</li>
+</ul>
+<p>Example:</p>
+<pre><code>condition = AI_High_Influencer
+disclosure = AI
+engagement = High
+source = Influencer</code></pre>
+<p>This reduces the risk of confusion during data cleaning.</p>
+</section>
+<section class="guide-section" id="section-9"><h2>9. Where to place interaction Embedded Data fields</h2>
+<p>The interaction fields generated by SMSLab should usually be placed before the Randomizer.</p>
+<p>Example:</p>
+<p>Embedded Data: SMSLab interaction fields</p>
+<pre><code>  __js_igfeed_post1_like
+  __js_igfeed_post1_comment
+  __js_igfeed_post1_save
+Randomizer
+  Group: Condition 1
+  Group: Condition 2</code></pre>
+<p>The fields should be declared before the stimulus appears, so the JavaScript inside the stimulus can write values to them.</p>
+<p>Leave the values blank.</p>
+<div class="callout">Do not manually set these fields to 0 in Survey Flow. The generated stimulus code initializes and updates them during the survey.</div>
+<p>Qualtrics documentation explains that adding Embedded Data in Survey Flow allows information to be saved in survey results; therefore, the interaction fields need to exist in Survey Flow if you want them to appear in the dataset. (Qualtrics)</p>
+</section>
+<section class="guide-section" id="section-10"><h2>10. Where to place condition Embedded Data fields</h2>
+<p>Condition Embedded Data should be placed inside each condition group, before the block containing the stimulus.</p>
+<p>Example:</p>
+<p>Group: AI disclosure</p>
+<pre><code>  Embedded Data:
+    condition = AI
+    disclosure = yes
+  Block:
+    AI disclosure feed</code></pre>
+<p>This ensures that when a participant is assigned to that group, Qualtrics saves the correct condition values.</p>
+<div class="callout">Do not place all condition values at the top of the Survey Flow. If you set:</div>
+<pre><code>condition = AI
+condition = NoAI</code></pre>
+<p>globally, Qualtrics will not know which one should apply to which participant. The condition values must be assigned inside the randomized group.</p>
+</section>
+<section class="guide-section" id="section-11"><h2>11. Recommended Survey Flow template</h2>
+<p>Here is a recommended template for most SMSLab studies:</p>
+<pre><code>Survey Flow</code></pre>
+<p>Embedded Data: interaction fields</p>
+<pre><code>  __js_igfeed_post1_like
+  __js_igfeed_post1_comment
+  __js_igfeed_post1_comment_submitted
+  __js_igfeed_post1_comment_text
+  __js_igfeed_post1_repost
+  __js_igfeed_post1_direct
+  __js_igfeed_post1_save</code></pre>
+<p>Randomizer: randomly present 1 of the following elements</p>
+<pre><code>  Group: Condition A
+    Embedded Data:
+      condition = A
+      factor_1 = A1
+      factor_2 = B1
+    Block:
+      Stimulus A
+  Group: Condition B
+    Embedded Data:
+      condition = B
+      factor_1 = A1
+      factor_2 = B2
+    Block:
+      Stimulus B
+  Group: Condition C
+    Embedded Data:
+      condition = C
+      factor_1 = A2
+      factor_2 = B1
+    Block:
+      Stimulus C
+  Group: Condition D
+    Embedded Data:
+      condition = D
+      factor_1 = A2
+      factor_2 = B2
+    Block:
+      Stimulus D
+Block:
+  Manipulation checks
+Block:
+  Dependent variables
+Block:
+  Demographics</code></pre>
+<p>This structure is simple, transparent, and easy to analyze.</p>
+</section>
+<section class="guide-section" id="section-12"><h2>12. Step-by-step: creating the structure in Qualtrics</h2>
+<p>Step 1: create the stimulus blocks</p>
+<p>In Qualtrics, create one block for each condition.</p>
+<p>Example:</p>
+<ul>
+<li>Stimulus - Condition A</li>
+<li>Stimulus - Condition B</li>
+<li>Stimulus - Condition C</li>
+<li>Stimulus - Condition D</li>
+</ul>
+<p>Inside each block:</p>
+<ol>
+<li>Add a Descriptive Text question.</li>
+<li>Open HTML/source view.</li>
+<li>Paste the HTML generated by SMSLab for that condition.</li>
+<li>Save the question.</li>
+</ol>
+<p>Step 2: open Survey Flow</p>
+<p>Go to:</p>
+<pre><code>Survey Flow</code></pre>
+<p>Survey Flow is where Qualtrics lets you organize blocks and add logic such as Embedded Data, Randomizers, Branches, and Groups. (Qualtrics)</p>
+<p>Step 3: add interaction Embedded Data</p>
+<p>At the beginning of Survey Flow, add an Embedded Data element.</p>
+<p>Insert all interaction fields shown by SMSLab.</p>
+<p>Example:</p>
+<pre><code>__js_igfeed_post1_like
 __js_igfeed_post1_comment
 __js_igfeed_post1_comment_submitted
 __js_igfeed_post1_comment_text
-__js_igfeed_post1_repost
-__js_igfeed_post1_direct
+__js_igfeed_post1_save</code></pre>
+<p>Leave all values blank.</p>
+<p>Step 4: add a Randomizer</p>
+<p>Below the interaction Embedded Data element, add a Randomizer.</p>
+<p>Set it to:</p>
+<p>Randomly present 1 of the following elements</p>
+<p>Qualtrics’ Randomizer can randomly present a selected number of nested elements and includes an option to evenly present elements across respondents. (Qualtrics)</p>
+<p>Step 5: create one group per condition</p>
+<p>Inside the Randomizer, create one Group for each condition.</p>
+<p>Each group should contain:</p>
+<ol>
+<li>Embedded Data identifying the condition.</li>
+<li>The stimulus block for that condition.</li>
+</ol>
+<p>Example:</p>
+<p>Group: Condition A</p>
+<pre><code>  Embedded Data:
+    condition = A
+  Block:
+    Stimulus - Condition A</code></pre>
+<p>Step 6: add the rest of the survey after the Randomizer</p>
+<p>After the Randomizer, add the rest of the questionnaire:</p>
+<ul>
+<li>Manipulation checks</li>
+<li>Mediators</li>
+<li>Dependent variables</li>
+<li>Controls</li>
+<li>Demographics</li>
+<li>Attention checks</li>
+<li>Debriefing</li>
+</ul>
+<p>Usually, these blocks should be outside the Randomizer so that all participants answer the same post-stimulus questions.</p>
+</section>
+<section class="guide-section" id="section-13"><h2>13. One-factor design example</h2>
+<p>Suppose your study manipulates message framing:</p>
+<p>Emotional framing vs Functional framing</p>
+<p>You need two conditions.</p>
+<p>Survey Flow:</p>
+<p>Embedded Data: interaction fields</p>
+<pre><code>  __js_igfeed_post1_like
+  __js_igfeed_post1_save
+  __js_igfeed_post1_comment</code></pre>
+<p>Randomizer: present 1 of 2</p>
+<pre><code>  Group: Emotional framing
+    Embedded Data:
+      condition = emotional
+      framing = emotional
+    Block:
+      Stimulus - Emotional framing
+  Group: Functional framing
+    Embedded Data:
+      condition = functional
+      framing = functional
+    Block:
+      Stimulus - Functional framing
+Block:
+  Outcome measures</code></pre>
+<p>Dataset example:</p>
+<pre><code>condition = emotional
+framing = emotional
+__js_igfeed_post1_like = 1
+brand_attitude = 5.8
+purchase_intention = 4.9</code></pre>
+</section>
+<section class="guide-section" id="section-14"><h2>14. Two-factor design example</h2>
+<p>Suppose your study manipulates:</p>
+<ul>
+<li>Source: Brand vs Influencer</li>
+<li>Disclosure: Present vs Absent</li>
+</ul>
+<p>This is a 2 &#215; 2 design.</p>
+<p>Create four condition groups:</p>
+<ul>
+<li>Brand + Disclosure</li>
+<li>Brand + No Disclosure</li>
+<li>Influencer + Disclosure</li>
+<li>Influencer + No Disclosure</li>
+</ul>
+<p>Survey Flow:</p>
+<p>Embedded Data: interaction fields</p>
+<pre><code>  __js_igfeed_post1_like
+  __js_igfeed_post1_comment
+  __js_igfeed_post1_save</code></pre>
+<p>Randomizer: present 1 of 4</p>
+<pre><code>  Group: Brand + Disclosure
+    Embedded Data:
+      condition = brand_disclosure
+      source = brand
+      disclosure = present
+    Block:
+      Stimulus - Brand Disclosure
+  Group: Brand + No Disclosure
+    Embedded Data:
+      condition = brand_no_disclosure
+      source = brand
+      disclosure = absent
+    Block:
+      Stimulus - Brand No Disclosure
+  Group: Influencer + Disclosure
+    Embedded Data:
+      condition = influencer_disclosure
+      source = influencer
+      disclosure = present
+    Block:
+      Stimulus - Influencer Disclosure
+  Group: Influencer + No Disclosure
+    Embedded Data:
+      condition = influencer_no_disclosure
+      source = influencer
+      disclosure = absent
+    Block:
+      Stimulus - Influencer No Disclosure</code></pre>
+<p>Dataset example:</p>
+<pre><code>condition = influencer_disclosure
+source = influencer
+disclosure = present
+__js_igfeed_post1_like = 0
+__js_igfeed_post1_save = 1</code></pre>
+<p>This makes it easy to test:</p>
+<ul>
+<li>main effect of source</li>
+<li>main effect of disclosure</li>
+<li>source &#215; disclosure interaction</li>
+</ul>
+</section>
+<section class="guide-section" id="section-15"><h2>15. Three-factor design example</h2>
+<p>Suppose your study manipulates:</p>
+<ul>
+<li>Source: Brand vs Influencer</li>
+<li>Disclosure: Present vs Absent</li>
+<li>Engagement: High vs Low</li>
+</ul>
+<p>This is a 2 &#215; 2 &#215; 2 design, meaning eight conditions.</p>
+<p>You should create eight groups inside the Randomizer.</p>
+<p>Each group should include:</p>
+<pre><code>condition
+source
+disclosure
+engagement</code></pre>
+<p>Example group:</p>
+<p>Group: Brand + Disclosure + High engagement</p>
+<pre><code>  Embedded Data:
+    condition = brand_disclosure_high
+    source = brand
+    disclosure = present
+    engagement = high
+  Block:
+    Stimulus - Brand Disclosure High</code></pre>
+<p>Another group:</p>
+<p>Group: Influencer + No disclosure + Low engagement</p>
+<pre><code>  Embedded Data:
+    condition = influencer_no_disclosure_low
+    source = influencer
+    disclosure = absent
+    engagement = low
+  Block:
+    Stimulus - Influencer No Disclosure Low</code></pre>
+<p>In the dataset, each participant will have clear factor-level variables:</p>
+<pre><code>condition = influencer_no_disclosure_low
+source = influencer
+disclosure = absent
+engagement = low</code></pre>
+<p>This is much easier to analyze than trying to recode everything from a single condition name.</p>
+</section>
+<section class="guide-section" id="section-16"><h2>16. Should the Embedded Data prefix change across conditions?</h2>
+<p>Usually, no.</p>
+<p>If each participant sees only one feed, keep the same SMSLab prefix across conditions.</p>
+<p>Example:</p>
+<pre><code>igfeed</code></pre>
+<p>This produces the same interaction variable names for all participants:</p>
+<pre><code>__js_igfeed_post1_like
 __js_igfeed_post1_save
-__js_igfeed_post1_carousel_slide
-__js_igfeed_post1_carousel_second_seen
-__js_igfeed_post1_ai_info_opened</pre>
-
-  <p>
-    These names are structured as follows:
-  </p>
-  <pre>__js_ + prefix + post number + interaction</pre>
-
-  <div class="tablewrap">
-    <table>
-      <thead>
-        <tr><th>Part</th><th>Meaning</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>__js_</code></td><td>Prefix used by newer Qualtrics JavaScript Embedded Data behavior.</td></tr>
-        <tr><td><code>igfeed</code></td><td>The default Embedded Data prefix from the generator.</td></tr>
-        <tr><td><code>post1</code></td><td>The post number in the generated feed.</td></tr>
-        <tr><td><code>like</code></td><td>The specific interaction being tracked.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h2>3. Create one block per condition</h2>
-  <p>
-    If you are running an experiment with multiple conditions, create one Qualtrics block for each
-    condition.
-  </p>
-  <p>
-    Example for a two-condition study:
-  </p>
-  <pre>Block 1: Positive Instagram feed
-Block 2: Negative Instagram feed</pre>
-
-  <p>
-    Example for a 2 × 2 design:
-  </p>
-  <pre>Block 1: AI disclosure + High engagement
-Block 2: AI disclosure + Low engagement
-Block 3: No AI disclosure + High engagement
-Block 4: No AI disclosure + Low engagement</pre>
-
-  <p>
-    Inside each block, add a <code>Descriptive Text</code> question containing the HTML stimulus
-    generated by SMSLab.
-  </p>
-
-  <h2>4. Add the generated HTML to Qualtrics</h2>
-  <ol>
-    <li>Open the relevant condition block.</li>
-    <li>Add a <code>Descriptive Text</code> question.</li>
-    <li>Open the Rich Content Editor.</li>
-    <li>Switch to HTML/source view, often shown as <code>&lt;&gt;</code>.</li>
-    <li>Paste the full generated HTML code.</li>
-    <li>Save the question.</li>
-  </ol>
-
-  <div class="callout">
-    <strong>Tip</strong>
-    Do not paste only part of the HTML. The generated code includes the layout, CSS, icons, and
-    JavaScript needed for the stimulus to work.
-  </div>
-
-  <h2>5. Add Embedded Data fields in Survey Flow</h2>
-  <p>
-    Before collecting data, you need to declare the Embedded Data fields shown by the generator.
-  </p>
-  <ol>
-    <li>Open <code>Survey Flow</code>.</li>
-    <li>Click <code>Add a New Element Here</code>.</li>
-    <li>Select <code>Embedded Data</code>.</li>
-    <li>Add all the field names listed by the generator.</li>
-    <li>Leave the values blank.</li>
-    <li>Move this Embedded Data element above the randomized experimental blocks.</li>
-    <li>Save the Survey Flow.</li>
-  </ol>
-
-  <p>
-    For example, if your stimulus tracks likes, saves, and comments for Post 1, add fields such as:
-  </p>
-  <pre>__js_igfeed_post1_like
-__js_igfeed_post1_save
+__js_igfeed_post1_comment</code></pre>
+<p>Then use separate condition variables to know which feed the participant saw:</p>
+<pre><code>condition
+source
+disclosure
+engagement</code></pre>
+<p>This is usually cleaner because all participants share the same interaction columns.</p>
+<p>Change the prefix only if the same participant sees more than one feed and you need separate interaction variables for each feed.</p>
+<p>Example:</p>
+<pre><code>feed1
+feed2</code></pre>
+<p>This would produce:</p>
+<pre><code>__js_feed1_post1_like
+__js_feed2_post1_like</code></pre>
+</section>
+<section class="guide-section" id="section-17"><h2>17. Between-subjects vs. within-subjects designs</h2>
+<h3>Between-subjects design</h3>
+<p>In a between-subjects design, each participant sees only one condition.</p>
+<div class="callout">Recommended structure:</div>
+<p>Randomizer: present 1 condition group</p>
+<p>Use the same interaction prefix across conditions.</p>
+<p>Save the assigned condition with Embedded Data inside each condition group.</p>
+<h3>Within-subjects design</h3>
+<p>In a within-subjects design, each participant sees multiple conditions or stimuli.</p>
+<p>In this case, you may need:</p>
+<ul>
+<li>different prefixes for different feeds</li>
+<li>randomized order of blocks</li>
+<li>order variables</li>
+<li>counterbalancing</li>
+</ul>
+<p>For example:</p>
+<ul>
+<li>feed1_post1_like</li>
+<li>feed2_post1_like</li>
+</ul>
+<p>You may also save order variables:</p>
+<pre><code>first_feed = emotional
+second_feed = functional</code></pre>
+<p>Within-subjects designs require more careful planning because interaction fields must distinguish which stimulus each behavior belongs to.</p>
+</section>
+<section class="guide-section" id="section-18"><h2>18. Randomizing order vs. randomizing assignment</h2>
+<p>There are two different randomization goals.</p>
+<h3>Randomizing assignment</h3>
+<p>This means assigning each participant to one condition.</p>
+<p>Example:</p>
+<p>Participant sees only one of four conditions.</p>
+<p>Use:</p>
+<p>Randomizer: present 1 of 4 groups</p>
+<h3>Randomizing order</h3>
+<p>This means every participant sees multiple blocks, but the order changes.</p>
+<p>Example:</p>
+<p>Every participant sees Feed A and Feed B, but the order is randomized.</p>
+<p>Use:</p>
+<p>Randomizer: present all elements in random order</p>
+<p>or use multiple Randomizers/Groups depending on the design.</p>
+<div class="callout">Do not confuse these two procedures. For most between-subjects experiments, you want random assignment, not random order.</div>
+</section>
+<section class="guide-section" id="section-19"><h2>19. Interaction fields for conditions with different numbers of posts</h2>
+<p>Ideally, all conditions should have the same number of posts and the same target post position.</p>
+<p>However, if conditions have different numbers of posts, the interaction fields may differ.</p>
+<p>Example:</p>
+<ul>
+<li>Condition A has 3 posts</li>
+<li>Condition B has 5 posts</li>
+</ul>
+<p>Then Condition B may produce fields such as:</p>
+<pre><code>__js_igfeed_post5_like</code></pre>
+<p>while Condition A will not.</p>
+<p>This is not necessarily wrong, but it makes the dataset harder to analyze.</p>
+<div class="callout">Recommended approach:</div>
+<p>Keep the same number of posts across conditions.</p>
+<p>Keep the target post in the same position.</p>
+<p>Keep the same interaction field structure across conditions.</p>
+</section>
+<section class="guide-section" id="section-20"><h2>20. Naming conventions</h2>
+<p>Use short, clean, consistent names.</p>
+<p>Good condition names:</p>
+<ul>
+<li>AI_High</li>
+<li>AI_Low</li>
+<li>NoAI_High</li>
+<li>NoAI_Low</li>
+</ul>
+<p>Good factor names:</p>
+<pre><code>ai_disclosure
+engagement
+source
+tone
+framing</code></pre>
+<p>Avoid names with spaces or unusual characters.</p>
+<p>Instead of:</p>
+<p>AI disclosure + high engagement</p>
+<p>use:</p>
+<p>AI_HighEngagement</p>
+<p>or:</p>
+<p>AI_High</p>
+<p>Clean naming reduces mistakes during analysis.</p>
+</section>
+<section class="guide-section" id="section-21"><h2>21. Testing the randomization</h2>
+<p>Before launching, test your randomization.</p>
+<div class="callout">Recommended procedure:</div>
+<ol>
+<li>Preview the survey several times.</li>
+<li>Check that different conditions appear across previews.</li>
+<li>Complete at least one test response per condition.</li>
+<li>Export or inspect the response data.</li>
+<li>Confirm that the condition Embedded Data matches the stimulus shown.</li>
+<li>Confirm that interaction fields are saved.</li>
+</ol>
+<p>For example, if a participant sees the “Brand + Disclosure” stimulus, the dataset should show:</p>
+<pre><code>condition = brand_disclosure
+source = brand
+disclosure = present</code></pre>
+<p>If this does not match, the Embedded Data is probably placed in the wrong group.</p>
+</section>
+<section class="guide-section" id="section-22"><h2>22. Common mistakes</h2>
+<p>Mistake 1: putting all condition values at the top of Survey Flow</p>
+<h3>Wrong:</h3>
+<pre><code>Embedded Data:
+  condition = A
+  condition = B
+  condition = C</code></pre>
+<p>This does not assign participants correctly.</p>
+<h3>Correct:</h3>
+<pre><code>Randomizer
+  Group A
+    Embedded Data: condition = A
+    Block: Stimulus A
+  Group B
+    Embedded Data: condition = B
+    Block: Stimulus B</code></pre>
+<p>Mistake 2: not grouping condition data with the stimulus block</p>
+<h3>Wrong:</h3>
+<pre><code>Randomizer
+  Embedded Data: condition = A
+  Embedded Data: condition = B
+  Block: Stimulus A
+  Block: Stimulus B</code></pre>
+<p>This can randomize condition labels and stimulus blocks separately, creating mismatches.</p>
+<h3>Correct:</h3>
+<pre><code>Randomizer
+  Group A
+    Embedded Data: condition = A
+    Block: Stimulus A
+  Group B
+    Embedded Data: condition = B
+    Block: Stimulus B</code></pre>
+<p>Mistake 3: using different prefixes for no reason</p>
+<p>This creates unnecessary complexity.</p>
+<p>If each participant sees one feed, keep:</p>
+<pre><code>igfeed</code></pre>
+<p>for all conditions.</p>
+<p>Mistake 4: forgetting factor-level variables</p>
+<p>For factorial designs, do not save only:</p>
+<pre><code>condition = A</code></pre>
+<p>Also save the factors:</p>
+<pre><code>source = brand
+disclosure = present</code></pre>
+<p>This makes analysis easier.</p>
+<p>Mistake 5: declaring interaction fields after the stimulus</p>
+<p>Interaction Embedded Data fields should be declared before the stimulus block.</p>
+<p>If they are placed after the stimulus, values may not be saved correctly.</p>
+</section>
+<section class="guide-section" id="section-23"><h2>23. Recommended workflow for a 2 &#215; 2 experiment</h2>
+<p>Here is the complete workflow.</p>
+<ul>
+<li>Step 1: define the factors</li>
+<li>Factor 1: Source</li>
+</ul>
+<pre><code>  brand
+  influencer</code></pre>
+<p>Factor 2: Disclosure</p>
+<pre><code>  present
+  absent</code></pre>
+<p>Step 2: create the four stimuli in SMSLab</p>
+<pre><code>brand_present
+brand_absent
+influencer_present
+influencer_absent</code></pre>
+<ul>
+<li>Step 3: create four Qualtrics blocks</li>
+<li>Stimulus - Brand Present</li>
+<li>Stimulus - Brand Absent</li>
+<li>Stimulus - Influencer Present</li>
+<li>Stimulus - Influencer Absent</li>
+<li>Step 4: paste the corresponding HTML into each block</li>
+</ul>
+<p>Use one Descriptive Text question per stimulus block.</p>
+<p>Step 5: add interaction Embedded Data before the Randomizer</p>
+<pre><code>__js_igfeed_post1_like
 __js_igfeed_post1_comment
-__js_igfeed_post1_comment_submitted
-__js_igfeed_post1_comment_text</pre>
-
-  <h2>6. Randomize participants across conditions</h2>
-  <p>
-    In Survey Flow, add a <code>Randomizer</code> element. Place your condition blocks inside the
-    Randomizer and configure it to show one element.
-  </p>
-
-  <p>
-    A typical structure looks like this:
-  </p>
-  <pre>Survey Flow
-│
-├── Embedded Data fields
-│
-├── Randomizer: randomly present 1 of the following elements
-│   ├── Block: Condition 1
-│   ├── Block: Condition 2
-│   ├── Block: Condition 3
-│   └── Block: Condition 4
-│
-└── Outcome measures / questionnaire blocks</pre>
-
-  <p>
-    This ensures that each participant sees only one feed condition.
-  </p>
-
-  <h2>7. Save the experimental condition</h2>
-  <p>
-    It is good practice to save the assigned condition as an Embedded Data variable.
-    For example:
-  </p>
-  <pre>condition = positive_feed
-condition = negative_feed</pre>
-
-  <p>
-    To do this, add an Embedded Data element inside or immediately before each condition block and
-    set a field such as:
-  </p>
-  <pre>condition = positive_feed</pre>
-
-  <p>
-    This makes analysis easier because your dataset will contain an explicit condition variable.
-  </p>
-
-  <h2>8. What each interaction field means</h2>
-
-  <div class="tablewrap">
-    <table>
-      <thead>
-        <tr><th>Field suffix</th><th>Meaning</th><th>Typical value</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>like</code></td><td>Participant clicked the like icon.</td><td><code>0</code> or <code>1</code></td></tr>
-        <tr><td><code>comment</code></td><td>Participant opened the comment area by clicking the comment icon.</td><td><code>0</code> or <code>1</code></td></tr>
-        <tr><td><code>comment_submitted</code></td><td>Participant submitted a written comment.</td><td><code>0</code> or <code>1</code></td></tr>
-        <tr><td><code>comment_text</code></td><td>Text entered by the participant.</td><td>Free text</td></tr>
-        <tr><td><code>repost</code></td><td>Participant clicked the repost icon.</td><td><code>0</code> or <code>1</code></td></tr>
-        <tr><td><code>direct</code></td><td>Participant clicked the direct/share icon.</td><td><code>0</code> or <code>1</code></td></tr>
-        <tr><td><code>save</code></td><td>Participant clicked the save icon.</td><td><code>0</code> or <code>1</code></td></tr>
-        <tr><td><code>carousel_slide</code></td><td>Final carousel slide visible to the participant.</td><td><code>1</code>, <code>2</code>, etc.</td></tr>
-        <tr><td><code>carousel_second_seen</code></td><td>Participant reached the second carousel image or later.</td><td><code>0</code> or <code>1</code></td></tr>
-        <tr><td><code>ai_info_opened</code></td><td>Participant clicked the AI Information label.</td><td><code>0</code> or <code>1</code></td></tr>
-        <tr><td><code>cta_click</code></td><td>Participant clicked the Learn more banner.</td><td><code>0</code> or <code>1</code></td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h2>9. Test before launching</h2>
-  <p>
-    Always test your survey before collecting data.
-  </p>
-  <ol>
-    <li>Preview the survey.</li>
-    <li>Interact with the stimulus: like, save, comment, open AI Information, click Learn more, scroll the carousel.</li>
-    <li>Complete the survey.</li>
-    <li>Open the response data.</li>
-    <li>Check whether the Embedded Data fields contain the expected values.</li>
-  </ol>
-
-  <p>
-    Example expected output:
-  </p>
-  <pre>__js_igfeed_post1_like = 1
-__js_igfeed_post1_comment = 1
-__js_igfeed_post1_comment_submitted = 1
-__js_igfeed_post1_comment_text = "Interesting post!"
-__js_igfeed_post2_carousel_second_seen = 1</pre>
-
-  <h2>10. Common problems and fixes</h2>
-
-  <h3>The Embedded Data fields are blank</h3>
-  <ul>
-    <li>Check that the fields were added in Survey Flow.</li>
-    <li>Check that the Embedded Data element appears before the stimulus block.</li>
-    <li>Check that the field names match exactly, including the <code>__js_</code> prefix.</li>
-    <li>Preview the survey and complete a full test response.</li>
-  </ul>
-
-  <h3>The stimulus does not look correct in Qualtrics</h3>
-  <ul>
-    <li>Make sure you pasted the full HTML code.</li>
-    <li>Make sure you used HTML/source view, not the normal visual editor.</li>
-    <li>Check whether external image URLs are working.</li>
-  </ul>
-
-  <h3>The condition variable is missing</h3>
-  <ul>
-    <li>Add a separate Embedded Data field called <code>condition</code>.</li>
-    <li>Set its value differently inside each condition block.</li>
-  </ul>
-
-  <h2>11. Recommended workflow</h2>
-  <ol>
-    <li>Create each feed condition in SMSLab.</li>
-    <li>Use a different Embedded Data prefix for each condition if needed.</li>
-    <li>Copy each generated HTML stimulus into its own Qualtrics block.</li>
-    <li>Add all Embedded Data fields in Survey Flow.</li>
-    <li>Add a condition variable.</li>
-    <li>Randomize condition blocks.</li>
-    <li>Test the full survey before launching.</li>
-  </ol>
-
-  <a class="button" href="../generators/smslab_instagram_feed_generator.html">Open Instagram Feed Generator</a>
-</article>
-</main>
-<footer><div class="container">SMSLab is an independent academic project.</div></footer>
-</body>
-</html>
+__js_igfeed_post1_save</code></pre>
+<p>...</p>
+<p>Step 6: create a Randomizer</p>
+<p>Set it to present one group.</p>
+<ul>
+<li>Step 7: create one group per condition</li>
+<li>Group: Brand Present</li>
+</ul>
+<pre><code>  Embedded Data:
+    condition = brand_present
+    source = brand
+    disclosure = present
+  Block:
+    Stimulus - Brand Present</code></pre>
+<p>Repeat for all four conditions.</p>
+<ul>
+<li>Step 8: add post-stimulus measures after the Randomizer</li>
+<li>Manipulation checks</li>
+<li>Dependent variables</li>
+<li>Controls</li>
+<li>Demographics</li>
+<li>Step 9: test all conditions</li>
+</ul>
+<p>Complete a test response for each condition.</p>
+</section>
+<section class="guide-section" id="section-24"><h2>24. Suggested reporting in a methods section</h2>
+<p>You can describe the randomization procedure like this:</p>
+<p>Participants were randomly assigned to one of four experimental conditions using the Qualtrics Survey Flow Randomizer. Each condition was implemented as a separate Survey Flow group containing condition-specific Embedded Data fields and the corresponding stimulus block. The condition Embedded Data recorded the assigned levels of the manipulated factors. Interaction data generated by the HTML stimulus were saved separately through Qualtrics Embedded Data fields.</p>
+<p>For a 2 &#215; 2 design:</p>
+<p>The study used a 2 &#215; 2 between-subjects design. The manipulated factors were source type and disclosure. In Qualtrics, each of the four experimental conditions was implemented as a separate randomized group. Each group contained Embedded Data fields identifying the assigned condition, source type, and disclosure level, followed by the corresponding SMSLab-generated HTML feed stimulus.</p>
+</section>
+<section class="guide-section" id="section-25"><h2>25. Final checklist</h2>
+<p>Before launching, check that:</p>
+<p>Each condition has its own stimulus block.</p>
+<p>Each condition has its own group in Survey Flow.</p>
+<p>Each group contains condition Embedded Data.</p>
+<p>Each group contains the correct stimulus block.</p>
+<p>The Randomizer presents only one condition group.</p>
+<p>Interaction Embedded Data fields are declared before the Randomizer.</p>
+<p>The same SMSLab prefix is used across conditions when each participant sees only one feed.</p>
+<p>Factor-level variables are saved for factorial designs.</p>
+<p>Post-stimulus measures are outside the Randomizer.</p>
+<p>The full survey has been tested.</p>
+<p>The dataset correctly records both condition assignment and interaction variables.</p>
+<p>A good Qualtrics setup should make it clear what the participant saw and what the participant did. This is the key principle behind combining SMSLab stimuli, condition Embedded Data, and interaction tracking.</p>
+</section>
+<section class="guide-section"><h2>Try the generators!</h2><div class="generator-grid">
+<a class="generator-card" href="../generators/smslab_instagram_feed_generator.html"><img class="platform-icon ig" src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram logo" loading="lazy"><h3>Instagram Feed Generator</h3><p>Create Instagram-style feed stimuli with multiple posts, captions, comments, labels, call-to-action banners, and trackable interactions.</p><span class="button">Open generator</span></a>
+<a class="generator-card" href="../generators/smslab_facebook_feed_generator.html"><img class="platform-icon fb" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook logo" loading="lazy"><h3>Facebook Feed Generator</h3><p>Create Facebook-style feed stimuli with posts, reactions, comments, shares, sponsored labels, and trackable interactions.</p><span class="button">Open generator</span></a>
+<a class="generator-card" href="../generators/smslab_linkedin_feed_generator.html"><img class="platform-icon li" src="https://upload.wikimedia.org/wikipedia/commons/8/81/LinkedIn_icon.svg" alt="LinkedIn logo" loading="lazy"><h3>LinkedIn Feed Generator</h3><p>Create LinkedIn-style feed stimuli with professional headers, reactions, comments, reposts, sends, promoted labels, and tracking.</p><span class="button">Open generator</span></a>
+<a class="generator-card" href="../generators/smslab_x_feed_generator.html"><img class="platform-icon x" src="https://upload.wikimedia.org/wikipedia/commons/c/cc/X_icon.svg" alt="X logo" loading="lazy"><h3>X Feed Generator</h3><p>Create X-style feed stimuli with replies, reposts, likes, bookmarks, shares, promoted labels, view-style metrics, and tracking.</p><span class="button">Open generator</span></a>
+</div></section>
+</article></div></main>
+<footer class="footer-note"><div class="container"><p>SMSLab is an independent academic project. It is not affiliated with, endorsed by, or sponsored by Meta, Instagram, Facebook, LinkedIn, X, Qualtrics, or any other platform.</p><p><a href="../privacy.html">Privacy Policy</a> &middot; <a href="../disclaimer.html">Disclaimer</a></p></div></footer>
+</body></html>
